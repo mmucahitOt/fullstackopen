@@ -1,6 +1,6 @@
 const { test, describe } = require("node:test");
 const assert = require("node:assert");
-const mostBlogs = require("../utils/list_helper").mostBlogs;
+const mostLikes = require("../utils/list_helper").mostLikes;
 
 describe("total likes", () => {
   const blogs = [
@@ -54,10 +54,10 @@ describe("total likes", () => {
     },
   ];
 
-  const expectedResult = { author: "Robert C. Martin", blogs: 3 };
+  const expectedResult = { author: "Edsger W. Dijkstra", likes: 17 };
 
   test("when list has only one blog, equals the likes of that", () => {
-    const result = mostBlogs(blogs);
+    const result = mostLikes(blogs);
 
     assert.deepStrictEqual(result, expectedResult);
   });
