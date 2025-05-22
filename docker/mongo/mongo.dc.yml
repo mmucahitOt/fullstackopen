@@ -1,0 +1,26 @@
+services:
+  #######################################
+  # Mongo Instance
+  #######################################
+  mongo:
+    container_name: fullstackopen-mongo
+    hostname: fullstackopen-mongo
+    image: mongo:6.0
+    ports:
+      - 27017:27017
+    restart: always
+    volumes:
+      - mongo_data:/data/fullstackopen-mongo-db
+    networks:
+      - fullstackopen-network
+    command: mongod --bind_ip localhost,fullstackopen-mongo
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+volumes:
+  mongo_data:
+    driver: local

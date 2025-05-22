@@ -1,0 +1,6 @@
+include:
+  - mongo/mongo.dc.yml
+
+networks:
+  fullstackopen-network:
+    driver: bridge
