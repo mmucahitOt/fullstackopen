@@ -1,9 +1,14 @@
 const Blog = require("../models/blog");
+const User = require("../models/user");
 const blogRouter = require("express").Router();
-
+const mongoose = require("mongoose");
 blogRouter.get("/", async (request, response, next) => {
   try {
-    const blogs = await Blog.find({});
+    const blogs = await Blog.find({}).populate("user", {
+      username: 1,
+      name: 1,
+      id: 1,
+    });
     response.json(blogs);
   } catch (error) {
     next(error);
@@ -12,8 +17,24 @@ blogRouter.get("/", async (request, response, next) => {
 
 blogRouter.post("/", async (request, response, next) => {
   try {
-    const blog = new Blog(request.body);
+    const { title, author, url, likes, userId } = request.body;
+    if (!userId) {
+      return response.status(400).json({ error: "userId is required" });
+    }
+    const blog = new Blog({
+      title,
+      author,
+      url,
+      likes,
+      user: new mongoose.Types.ObjectId(userId),
+    });
     const result = await blog.save();
+    const userUpdateResult = await User.findByIdAndUpdate(userId, {
+      $push: { blogs: result._id },
+    });
+    if (!userUpdateResult) {
+      return response.status(400).json({ error: "User not found" });
+    }
     response.status(201).json(result);
   } catch (error) {
     next(error);

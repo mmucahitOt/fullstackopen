@@ -1,13 +1,14 @@
 GET http://localhost:3001/api/blogs
 
 ###
-POST http://localhost:3001/api/blog
-s
+POST http://localhost:3001/api/blogs
 Content-Type: application/json
 
 {
     "title": "Test Blog",
-    "author": "Test Author",
+    "author": "Test Author", 
     "url": "https://test.com",
-    "likes": 10
+    "likes": 10,
+    "userId": "68305b8287feccc6c54160b8"
 }
+
