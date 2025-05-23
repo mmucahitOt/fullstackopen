@@ -1,5 +1,6 @@
 const { default: mongoose } = require("mongoose");
 const Blog = require("../../models/blog");
+const User = require("../../models/user");
 
 const initialBlogs = [
   {
@@ -57,8 +58,8 @@ const seedBlogs = async () => {
 };
 
 const resetDatabase = async () => {
+  await User.deleteMany({});
   await Blog.deleteMany({});
-  await seedBlogs();
 };
 
 module.exports = { initialBlogs, seedBlogs, resetDatabase };

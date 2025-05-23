@@ -3,16 +3,22 @@ const { test, after, beforeEach, describe } = require("node:test");
 const mongoose = require("mongoose");
 const supertest = require("supertest");
 const app = require("../../app");
-const { resetDatabase, initialBlogs } = require("../helpers/seedBlogs");
+const {
+  resetDatabase,
+  initialBlogs,
+  seedBlogs,
+} = require("../helpers/seedBlogs");
 
 const api = supertest(app);
 
 describe("tests for blogs", () => {
   beforeEach(async () => {
     await resetDatabase();
+    await seedBlogs();
   });
 
   after(async () => {
+    await resetDatabase();
     await mongoose.connection.close();
     console.log("mongoose connection closed");
   });
