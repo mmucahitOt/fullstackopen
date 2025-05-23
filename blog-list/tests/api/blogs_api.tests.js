@@ -113,5 +113,18 @@ describe("tests for blogs", () => {
       assert.strictEqual(createdBlog.url, "https://test.com");
       assert.strictEqual(createdBlog.likes, 0);
     });
+
+    test("default value of 'likes' is 0", async () => {
+      const newBlog = {
+        title: "Test Blog",
+        author: "Test Author",
+        url: "https://test.com",
+      };
+
+      const response = await api.post("/api/blogs").send(newBlog).expect(201);
+      const createdBlog = response.body;
+
+      assert.strictEqual(createdBlog.likes, 0);
+    });
   });
 });
