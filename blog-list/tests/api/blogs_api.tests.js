@@ -1,5 +1,5 @@
 const assert = require("node:assert");
-const { test, after, beforeEach } = require("node:test");
+const { test, after, beforeEach, describe } = require("node:test");
 const mongoose = require("mongoose");
 const supertest = require("supertest");
 const app = require("../../app");
@@ -58,24 +58,38 @@ const initialBlogs = [
   },
 ];
 
-beforeEach(async () => {
-  await Blog.deleteMany({});
-  await Blog.insertMany(initialBlogs);
-});
+describe("tests for blogs", () => {
+  beforeEach(async () => {
+    await Blog.deleteMany({});
+    await Blog.insertMany(initialBlogs);
+  });
 
-after(async () => {
-  await mongoose.connection.close();
-});
+  after(async () => {
+    await mongoose.connection.close();
+    console.log("mongoose connection closed");
+  });
 
-test("blogs are returned as json", async () => {
-  await api
-    .get("/api/blogs")
-    .expect(200)
-    .expect("Content-Type", /application\/json/);
-});
+  describe("test get /api/blogs", () => {
+    test("blogs are returned as json", async () => {
+      await api
+        .get("/api/blogs")
+        .expect(200)
+        .expect("Content-Type", /application\/json/);
+    });
 
-test("all blogs are returned", async () => {
-  const response = await api.get("/api/blogs");
+    test("all blogs are returned", async () => {
+      const response = await api.get("/api/blogs");
 
-  assert.strictEqual(response.body.length, initialBlogs.length);
+      assert.strictEqual(response.body.length, initialBlogs.length);
+    });
+  });
+
+  describe("test if '_id' is generated", () => {
+    test("if '_id' is generated", async () => {
+      const response = await api.get("/api/blogs");
+      const blog = response.body[0];
+
+      assert.strictEqual(blog._id.toString().length, 24);
+    });
+  });
 });
