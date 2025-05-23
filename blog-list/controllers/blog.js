@@ -2,6 +2,16 @@ const Blog = require("../models/blog");
 const User = require("../models/user");
 const blogRouter = require("express").Router();
 const mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
+
+const getTokenFrom = (request) => {
+  const authorization = request.get("authorization");
+  if (authorization && authorization.startsWith("Bearer ")) {
+    return authorization.replace("Bearer ", "");
+  }
+  return null;
+};
+
 blogRouter.get("/", async (request, response, next) => {
   try {
     const blogs = await Blog.find({}).populate("user", {
@@ -17,7 +27,13 @@ blogRouter.get("/", async (request, response, next) => {
 
 blogRouter.post("/", async (request, response, next) => {
   try {
-    const { title, author, url, likes, userId } = request.body;
+    const token = getTokenFrom(request);
+    const decodedToken = jwt.verify(token, process.env.SECRET);
+    if (!decodedToken.id) {
+      return response.status(401).json({ error: "token invalid" });
+    }
+    const userId = decodedToken.id;
+    const { title, author, url, likes } = request.body;
     if (!userId) {
       return response.status(400).json({ error: "userId is required" });
     }
