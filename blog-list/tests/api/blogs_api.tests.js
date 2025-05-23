@@ -100,11 +100,37 @@ describe("tests for blogs", () => {
     test("a blog can be deleted", async () => {
       const blogToDelete = initialBlogs[0];
 
-      const deleteResponse = await api.delete(`/api/blogs/${blogToDelete._id}`).expect(204);
+      const deleteResponse = await api
+        .delete(`/api/blogs/${blogToDelete._id}`)
+        .expect(204);
       assert.strictEqual(deleteResponse.status, 204);
 
       const response = await api.get("/api/blogs");
-      assert.strictEqual(response.body.length, initialBlogs.length - 1, "blog was not deleted");
+      assert.strictEqual(
+        response.body.length,
+        initialBlogs.length - 1,
+        "blog was not deleted"
+      );
+    });
+  });
+
+  describe("test put /api/blogs/:id", () => {
+    test("a blog can be updated", async () => {
+      const blogToUpdate = initialBlogs[0];
+      const updatedBlog = {
+        title: "Updated Blog",
+        author: "Updated Author",
+        likes: 99,
+      };
+
+      const updateResponse = await api
+        .put(`/api/blogs/${blogToUpdate._id}`)
+        .send(updatedBlog)
+        .expect(200);
+      assert.strictEqual(updateResponse.status, 200);
+      assert.strictEqual(updateResponse.body.title, "Updated Blog");
+      assert.strictEqual(updateResponse.body.author, "Updated Author");
+      assert.strictEqual(updateResponse.body.likes, 99);
     });
   });
 });
