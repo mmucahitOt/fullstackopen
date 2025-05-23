@@ -126,5 +126,25 @@ describe("tests for blogs", () => {
 
       assert.strictEqual(createdBlog.likes, 0);
     });
+
+    test("if title is missing, return 400", async () => {
+      const newBlog = {
+        author: "Test Author",
+        url: "https://test.com",
+        likes: 3,
+      };
+
+      await api.post("/api/blogs").send(newBlog).expect(400);
+    });
+
+    test("if url is missing, return 400", async () => {
+      const newBlog = {
+        title: "Test Blog",
+        author: "Test Author",
+        likes: 3,
+      };
+
+      await api.post("/api/blogs").send(newBlog).expect(400);
+    });
   });
 });
