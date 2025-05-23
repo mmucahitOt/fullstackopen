@@ -5,6 +5,7 @@ const logger = require("./utils/logger");
 const middleware = require("./utils/middleware");
 const blogRouter = require("./controllers/blog");
 const userRouter = require("./controllers/user");
+const loginRouter = require("./controllers/login");
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.use(express.static("dist"));
 app.use(express.json());
 app.use(middleware.requestLogger);
 
+app.use("/api/login", loginRouter);
 app.use("/api/users", userRouter);
 app.use("/api/blogs", blogRouter);
 
