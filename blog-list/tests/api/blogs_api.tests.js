@@ -92,4 +92,26 @@ describe("tests for blogs", () => {
       assert.strictEqual(blog._id.toString().length, 24);
     });
   });
+
+  describe("test post /api/blogs", () => {
+    test("a valid blog can be added", async () => {
+      const id = new mongoose.Types.ObjectId();
+      const newBlog = {
+        _id: id,
+        title: "Test Blog",
+        author: "Test Author",
+        url: "https://test.com",
+        likes: 0,
+      };
+
+      const response = await api.post("/api/blogs").send(newBlog).expect(201);
+      const createdBlog = response.body;
+
+      assert.strictEqual(createdBlog._id.toString(), id.toString());
+      assert.strictEqual(createdBlog.title, "Test Blog");
+      assert.strictEqual(createdBlog.author, "Test Author");
+      assert.strictEqual(createdBlog.url, "https://test.com");
+      assert.strictEqual(createdBlog.likes, 0);
+    });
+  });
 });
