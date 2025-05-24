@@ -3,9 +3,8 @@ const mongoose = require("mongoose");
 const config = require("./utils/config");
 const logger = require("./utils/logger");
 const middleware = require("./utils/middleware");
-const blogRouter = require("./controllers/blog");
-const userRouter = require("./controllers/user");
-const loginRouter = require("./controllers/login");
+const authRouter = require("./controllers/auth");
+const apiRouter = require("./controllers/api/api");
 
 const app = express();
 
@@ -23,11 +22,9 @@ mongoose
 app.use(express.static("dist"));
 app.use(express.json());
 app.use(middleware.requestLogger);
-app.use(middleware.tokenExtractor);
 
-app.use("/api/login", loginRouter);
-app.use("/api/users", userRouter);
-app.use("/api/blogs", blogRouter);
+app.use("/auth", authRouter);
+app.use("/api", apiRouter);
 
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);

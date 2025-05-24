@@ -6,62 +6,81 @@ const app = require("../../app");
 const {
   resetDatabase,
   initialBlogs,
-  seedBlogs,
-} = require("../helpers/seedBlogs");
+  initializeDatabase,
+  initialUser,
+} = require("../helpers/seed_data");
 
 const api = supertest(app);
 
 describe("tests for blogs", () => {
-  beforeEach(async () => {
-    await resetDatabase();
-    await seedBlogs();
-  });
+  let token;
 
   after(async () => {
-    await resetDatabase();
     await mongoose.connection.close();
     console.log("mongoose connection closed");
+  });
+
+  beforeEach(async () => {
+    await resetDatabase();
+    await initializeDatabase();
+
+    const loginResponse = await api
+      .post("/auth/login")
+      .send({
+        username: initialUser.username,
+        password: initialUser.password,
+      })
+      .expect(200);
+    token = loginResponse.body.token;
+    console.log("token", token);
   });
 
   describe("test get /api/blogs", () => {
     test("blogs are returned as json", async () => {
       await api
         .get("/api/blogs")
+        .set("Authorization", `Bearer ${token}`)
         .expect(200)
         .expect("Content-Type", /application\/json/);
     });
 
     test("all blogs are returned", async () => {
-      const response = await api.get("/api/blogs");
+      const response = await api
+        .get("/api/blogs")
+        .set("Authorization", `Bearer ${token}`);
 
       assert.strictEqual(response.body.length, initialBlogs.length);
     });
   });
 
-  describe("test if '_id' is generated", () => {
-    test("if '_id' is generated", async () => {
-      const response = await api.get("/api/blogs");
+  describe("test if 'id' is generated", () => {
+    test("if 'id' is generated", async () => {
+      const response = await api
+        .get("/api/blogs")
+        .set("Authorization", `Bearer ${token}`);
       const blog = response.body[0];
 
-      assert.strictEqual(blog._id.toString().length, 24);
+      assert.strictEqual(blog.id.toString().length, 24);
     });
   });
 
   describe("test post /api/blogs", () => {
     test("a valid blog can be added", async () => {
-      const id = new mongoose.Types.ObjectId();
       const newBlog = {
-        _id: id,
         title: "Test Blog",
         author: "Test Author",
         url: "https://test.com",
         likes: 0,
       };
 
-      const response = await api.post("/api/blogs").send(newBlog).expect(201);
+      const response = await api
+        .post("/api/blogs")
+        .set("Authorization", `Bearer ${token}`)
+        .send(newBlog)
+        .expect(201);
       const createdBlog = response.body;
 
-      assert.strictEqual(createdBlog._id.toString(), id.toString());
+      assert.strictEqual(createdBlog.id.toString().length, 24);
       assert.strictEqual(createdBlog.title, "Test Blog");
       assert.strictEqual(createdBlog.author, "Test Author");
       assert.strictEqual(createdBlog.url, "https://test.com");
@@ -75,7 +94,11 @@ describe("tests for blogs", () => {
         url: "https://test.com",
       };
 
-      const response = await api.post("/api/blogs").send(newBlog).expect(201);
+      const response = await api
+        .post("/api/blogs")
+        .set("Authorization", `Bearer ${token}`)
+        .send(newBlog)
+        .expect(201);
       const createdBlog = response.body;
 
       assert.strictEqual(createdBlog.likes, 0);
@@ -88,7 +111,11 @@ describe("tests for blogs", () => {
         likes: 3,
       };
 
-      await api.post("/api/blogs").send(newBlog).expect(400);
+      await api
+        .post("/api/blogs")
+        .set("Authorization", `Bearer ${token}`)
+        .send(newBlog)
+        .expect(400);
     });
 
     test("if url is missing, return 400", async () => {
@@ -98,7 +125,22 @@ describe("tests for blogs", () => {
         likes: 3,
       };
 
-      await api.post("/api/blogs").send(newBlog).expect(400);
+      await api
+        .post("/api/blogs")
+        .set("Authorization", `Bearer ${token}`)
+        .send(newBlog)
+        .expect(400);
+    });
+
+    test("if token is missing, return 401", async () => {
+      const newBlog = {
+        title: "Test Blog",
+        author: "Test Author",
+        url: "https://test.com",
+      };
+
+      const response = await api.post("/api/blogs").send(newBlog);
+      assert.strictEqual(response.status, 401);
     });
   });
 
@@ -108,10 +150,13 @@ describe("tests for blogs", () => {
 
       const deleteResponse = await api
         .delete(`/api/blogs/${blogToDelete._id}`)
+        .set("Authorization", `Bearer ${token}`)
         .expect(204);
       assert.strictEqual(deleteResponse.status, 204);
 
-      const response = await api.get("/api/blogs");
+      const response = await api
+        .get("/api/blogs")
+        .set("Authorization", `Bearer ${token}`);
       assert.strictEqual(
         response.body.length,
         initialBlogs.length - 1,
@@ -131,6 +176,7 @@ describe("tests for blogs", () => {
 
       const updateResponse = await api
         .put(`/api/blogs/${blogToUpdate._id}`)
+        .set("Authorization", `Bearer ${token}`)
         .send(updatedBlog)
         .expect(200);
       assert.strictEqual(updateResponse.status, 200);

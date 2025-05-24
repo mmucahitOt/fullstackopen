@@ -1,12 +1,17 @@
-const Blog = require("../models/blog");
-const User = require("../models/user");
+const Blog = require("../../models/blog");
+const User = require("../../models/user");
 const blogRouter = require("express").Router();
 const mongoose = require("mongoose");
-const jwt = require("jsonwebtoken");
+const { userIdExtractor } = require("../../utils/middleware");
+
+blogRouter.use(userIdExtractor);
 
 blogRouter.get("/", async (request, response, next) => {
+  const userId = request.userId;
   try {
-    const blogs = await Blog.find({}).populate("user", {
+    const blogs = await Blog.find({
+      user: new mongoose.Types.ObjectId(userId),
+    }).populate("user", {
       username: 1,
       name: 1,
       id: 1,
@@ -19,16 +24,10 @@ blogRouter.get("/", async (request, response, next) => {
 
 blogRouter.post("/", async (request, response, next) => {
   try {
-    const token = request.token;
-    const decodedToken = jwt.verify(token, process.env.SECRET);
-    if (!decodedToken.id) {
-      return response.status(401).json({ error: "token invalid" });
-    }
-    const userId = decodedToken.id;
+    const userId = request.userId;
+
     const { title, author, url, likes } = request.body;
-    if (!userId) {
-      return response.status(400).json({ error: "userId is required" });
-    }
+
     const blog = new Blog({
       title,
       author,
@@ -51,6 +50,17 @@ blogRouter.post("/", async (request, response, next) => {
 
 blogRouter.delete("/:id", async (request, response, next) => {
   try {
+    const userId = request.userId;
+
+    const blog = await Blog.findById(request.params.id);
+    if (!blog) {
+      return response.status(404).json({ error: "Blog not found" });
+    }
+
+    if (blog.user.toString() !== userId) {
+      return response.status(401).json({ error: "Unauthorized" });
+    }
+
     await Blog.findByIdAndDelete(request.params.id);
     response.status(204).end();
   } catch (error) {
@@ -60,6 +70,17 @@ blogRouter.delete("/:id", async (request, response, next) => {
 
 blogRouter.put("/:id", async (request, response, next) => {
   try {
+    const userId = request.userId;
+
+    const blog = await Blog.findById(request.params.id);
+    if (!blog) {
+      return response.status(404).json({ error: "Blog not found" });
+    }
+
+    if (blog.user.toString() !== userId) {
+      return response.status(401).json({ error: "Unauthorized" });
+    }
+
     const updatedBlog = await Blog.findByIdAndUpdate(
       request.params.id,
       {

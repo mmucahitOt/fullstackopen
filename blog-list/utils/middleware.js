@@ -1,4 +1,5 @@
 const logger = require("./logger");
+const { extractUserIdFromRequest } = require("./token_manager");
 
 const requestLogger = (request, response, next) => {
   logger.info("Method:", request.method);
@@ -43,9 +44,21 @@ const tokenExtractor = (request, response, next) => {
   next();
 };
 
+const userIdExtractor = (request, response, next) => {
+  const userId = extractUserIdFromRequest(request);
+
+  if (!userId) {
+    return response.status(401).json({ error: "token invalid" });
+  }
+
+  request.userId = userId;
+  next();
+};
+
 module.exports = {
   requestLogger,
   unknownEndpoint,
   errorHandler,
   tokenExtractor,
+  userIdExtractor,
 };
