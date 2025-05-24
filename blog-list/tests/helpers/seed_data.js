@@ -65,6 +65,15 @@ const initialBlogs = [
     user: new mongoose.Types.ObjectId("5a422a851b54a676234d17f7"),
     __v: 0,
   },
+  {
+    _id: new mongoose.Types.ObjectId("5a422bc61b54a676234d17fc"),
+    title: "Test Blog",
+    author: "Test Author",
+    url: "https://test.com",
+    likes: 2,
+    user: new mongoose.Types.ObjectId("5a422a851b54a676234d17f7"),
+    __v: 0,
+  },
 ];
 
 const seedUsers = async () => {
