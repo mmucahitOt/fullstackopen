@@ -1,13 +1,10 @@
-import LoginForm from "./components/LoginForm";
+import LoginComp from "./components/LoginComp";
 import { login } from "../../services/auth.service";
 import { useState, useEffect } from "react";
 import { Blogs } from "../blog/Blogs";
 import localStorageService from "../../services/local_storage.service";
 
 const Login = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -18,36 +15,23 @@ const Login = () => {
     }
   }, []);
 
-
-  const handleLogin = async (event) => {
-    event.preventDefault();
-    try {
-      const response = await login(username, password);
-      console.log(response);
-      setUser(response.data);
-      localStorageService.setUser(response.data);
-    } catch (error) {
-      console.log(error);
-      setError(error.response.data.error);
-    }
+  const populateLoggedInUser = (user) => {
+    setUser(user);
+    localStorageService.setUser(user);
   };
 
-  const handleRemoveCurrentUser = () => {
+  const handleUserLogout = () => {
     setUser(null);
   };
 
-  if (error) {
-    return <div>{JSON.stringify(error)}</div>;
-  }
-
   if (user) {
-    return <Blogs user={user} handleRemoveCurrentUser={handleRemoveCurrentUser} />
+    return <Blogs user={user} handleRemoveCurrentUser={handleUserLogout} />
   }
 
   return (
     <div>
       <h3>login in to application</h3>
-      <LoginForm handleLogin={handleLogin} username={username} password={password} setUsername={setUsername} setPassword={setPassword} />
+      <LoginComp populateLoggedInUser={populateLoggedInUser} />
     </div>
   );
 };

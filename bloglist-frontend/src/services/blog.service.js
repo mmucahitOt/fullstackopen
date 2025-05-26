@@ -11,3 +11,16 @@ export const getAll = async (token) => {
   });
   return response.data;
 };
+
+export const createBlog = async ({ token, title, author, url }) => {
+  const response = await axios.post(
+    BLOG_API_URL,
+    { title, author, url: url },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response.data;
+};
