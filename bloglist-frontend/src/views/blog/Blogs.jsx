@@ -2,8 +2,9 @@ import { useState, useEffect } from "react";
 import { getAll } from "../../services/blog.service";
 import Blog from "./components/Blog";
 import Text from "../../components/Text";
+import LogoutForm from "../login/components/LogoutForm";
 
-export const Blogs = ({user}) => {
+export const Blogs = ({user, handleLogout}) => {
   const [blogs, setBlogs] = useState([]);
   const [error, setError] = useState(null);
 
@@ -28,6 +29,7 @@ export const Blogs = ({user}) => {
     <div>
       <h3>blogs</h3>
       <Text style={{ marginBottom: "10px" }} text={user.username + " logged in"} />
+      <LogoutForm handleLogout={handleLogout} />
       {blogs.map((blog) => <Blog key={blog.id} blog={blog} />)}
     </div>
   );
