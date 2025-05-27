@@ -3,7 +3,7 @@ import { useState } from "react";
 import { createBlog } from "../../../services/blog.service";
 import FormInput from "../../../components/common/form/FormInput";
 
-const BlogCreate = ({ user, refetchBlogs }) => {
+const BlogCreate = ({ user, refetchBlogs, handleNotification }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
@@ -14,8 +14,10 @@ const BlogCreate = ({ user, refetchBlogs }) => {
       const response = await createBlog({ token: user.token, title, author, url });
       console.log(response);
       await refetchBlogs();
+      handleNotification({message: "Blog created successfully", type: "success"});
     } catch (error) {
       console.log(error);
+      handleNotification({message: error.response.data.error, type: "error"});
     }
   };
   return (
