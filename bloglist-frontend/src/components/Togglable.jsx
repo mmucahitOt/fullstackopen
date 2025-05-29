@@ -1,6 +1,6 @@
 import { useState, forwardRef, useImperativeHandle } from 'react';
 
-const Togglable = forwardRef(({ children, otherRefOfTogglable, labelWhenVisible, labelWhenHidden, hasButton = true}, ref) => {
+const Togglable = forwardRef(({ children, otherRefOfTogglable, labelWhenVisible, labelWhenHidden, hasButton = true, onButtonClick, styles, buttonStyle}, ref) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useImperativeHandle(ref, () => {
@@ -20,13 +20,18 @@ const Togglable = forwardRef(({ children, otherRefOfTogglable, labelWhenVisible,
 
   const handleButtonClick = () => {
     setIsVisible(!isVisible);
-    otherRefOfTogglable.current.handleVisibility(isVisible);
+    if (onButtonClick) {
+      onButtonClick();
+    }
+    if (otherRefOfTogglable) {
+      otherRefOfTogglable.current.handleVisibility(isVisible);
+    }
   };
 
   return (
-    <div>
+    <div style={styles}>
       {isVisible && children}
-      {hasButton && <button onClick={handleButtonClick}>{isVisible ? labelWhenVisible : labelWhenHidden}</button>}
+      {hasButton && <button style={buttonStyle} onClick={handleButtonClick}>{isVisible ? labelWhenVisible : labelWhenHidden}</button>}
     </div>
   );
 });

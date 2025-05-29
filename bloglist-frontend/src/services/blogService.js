@@ -1,5 +1,5 @@
 import axios from "axios";
-import generateURL from "./service.config";
+import generateURL from "./serviceConfig";
 
 const BLOG_API_URL = generateURL("api", "blogs");
 
@@ -22,5 +22,16 @@ export const createBlog = async ({ token, title, author, url }) => {
       },
     }
   );
+  return response.data;
+};
+
+export const updateBlog = async ({ token, id, updateOptions }) => {
+  console.log("updateOptions", updateOptions);
+  const response = await axios.put(BLOG_API_URL + "/" + id, updateOptions, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
   return response.data;
 };

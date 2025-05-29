@@ -1,5 +1,5 @@
 import axios from "axios";
-import generateURL from "./service.config";
+import generateURL from "./serviceConfig";
 
 const AUTH_API_URL = generateURL("auth");
 

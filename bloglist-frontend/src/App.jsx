@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import localStorageService from "./services/local_storage.service";
+import localStorageService from "./services/localStorageService";
 import LoginView from "./views/login/LoginView";
 import Notification from "./components/Notification"
 import BlogView from "./views/blog/BlogView";

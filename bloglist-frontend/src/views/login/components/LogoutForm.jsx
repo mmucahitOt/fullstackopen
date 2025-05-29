@@ -1,5 +1,5 @@
 import Form from "../../../components/common/form/Form";
-import localStorageService from "../../../services/local_storage.service";
+import localStorageService from "../../../services/localStorageService";
 
 const LogOutForm = ({ handleRemoveCurrentUser }) => {
   const handleLogout = async () => {

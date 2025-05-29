@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { getAll } from "../../services/blog.service";
+import { getAll } from "../../services/blogService";
 import BlogCreate from "./components/BlogCreate";
 import Blogs from "./components/Blogs";
 import Togglable from "../../components/Togglable";
@@ -45,7 +45,7 @@ const BlogView = ({ user, handleTitleChange, handleNotification }) => {
         <BlogCreate user={user} refetchBlogs={fetchBlogs} handleNotification={handleNotification} />
       </Togglable>
       <Togglable ref={blogListRef} hasButton={false}>
-        <Blogs refetchBlogs={fetchBlogs} blogs={blogs} />
+        <Blogs refetchBlogs={fetchBlogs} blogs={blogs} handleNotification={handleNotification} user={user}/>
       </Togglable>
     </div>
   );

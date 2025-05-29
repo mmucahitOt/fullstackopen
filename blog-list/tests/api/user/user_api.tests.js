@@ -2,8 +2,8 @@ const assert = require("node:assert");
 const { test, after, beforeEach, describe } = require("node:test");
 const mongoose = require("mongoose");
 const supertest = require("supertest");
-const app = require("../../app");
-const { resetDatabase } = require("../helpers/seed_data");
+const app = require("../../../app");
+const { resetDatabase } = require("../../helpers/seed_data");
 
 const api = supertest(app);
 

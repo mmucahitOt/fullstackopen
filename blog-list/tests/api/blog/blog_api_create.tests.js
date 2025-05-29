@@ -2,13 +2,13 @@ const assert = require("node:assert");
 const { test, after, beforeEach, describe } = require("node:test");
 const mongoose = require("mongoose");
 const supertest = require("supertest");
-const app = require("../../app");
+const app = require("../../../app");
 const {
   resetDatabase,
   initialBlogs,
   initializeDatabase,
   initialUser,
-} = require("../helpers/seed_data");
+} = require("../../helpers/seed_data");
 
 const api = supertest(app);
 
@@ -16,6 +16,7 @@ describe("tests for blogs", () => {
   let token;
 
   after(async () => {
+    await resetDatabase();
     await mongoose.connection.close();
     console.log("mongoose connection closed");
   });

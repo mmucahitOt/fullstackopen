@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
-const Blog = require("../../models/blog");
-const User = require("../../models/user");
-const logger = require("../../utils/logger");
+const Blog = require("../models/blog");
+const User = require("../models/user");
+const logger = require("../utils/logger");
 
 const initialUser = {
   _id: new mongoose.Types.ObjectId("5a422a851b54a676234d17f7"),

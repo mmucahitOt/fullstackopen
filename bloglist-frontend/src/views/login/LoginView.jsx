@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Form from "../../components/common/form/Form";
 import FormInput from "../../components/common/form/FormInput";
-import { login } from "../../services/auth.service";
+import { login } from "../../services/authService";
 
 const LoginView = ({ populateLoggedInUser, handleNotification, handleTitleChange }) => {
   const [username, setUsername] = useState("");

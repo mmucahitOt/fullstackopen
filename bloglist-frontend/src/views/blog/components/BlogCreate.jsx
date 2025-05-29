@@ -1,6 +1,6 @@
 import Form from "../../../components/common/form/Form";
 import { useState } from "react";
-import { createBlog } from "../../../services/blog.service";
+import { createBlog } from "../../../services/blogService";
 import FormInput from "../../../components/common/form/FormInput";
 
 const BlogCreate = ({ user, refetchBlogs, handleNotification }) => {
