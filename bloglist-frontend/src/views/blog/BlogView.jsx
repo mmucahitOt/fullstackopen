@@ -1,9 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { getAll } from "../../services/blog.service";
 import BlogCreate from "./components/BlogCreate";
 import Blogs from "./components/Blogs";
+import Togglable from "../../components/Togglable";
 
-const BlogView = ({user, handleTitleChange, handleNotification}) => {
+const BlogView = ({ user, handleTitleChange, handleNotification }) => {
+  const blogCreateRef = useRef();
+  const blogListRef = useRef();
+  const [mode, setMode] = useState("list");
+
   const [blogs, setBlogs] = useState([]);
 
   useEffect(() => {
@@ -13,6 +18,16 @@ const BlogView = ({user, handleTitleChange, handleNotification}) => {
   useEffect(() => {
     fetchBlogs();
   }, [user]);
+
+  useEffect(() => {
+    if (mode === "create") {
+      blogCreateRef.current.handleVisibility(true);
+      blogListRef.current.handleVisibility(false);
+    } else {
+      blogCreateRef.current.handleVisibility(false);
+      blogListRef.current.handleVisibility(true);
+    }
+  }, [mode]);
 
   const fetchBlogs = async () => {
     try {
@@ -26,8 +41,12 @@ const BlogView = ({user, handleTitleChange, handleNotification}) => {
 
   return (
     <div>
-      <BlogCreate user={user} refetchBlogs={fetchBlogs} handleNotification={handleNotification} />
-      <Blogs blogs={blogs} />
+      <Togglable ref={blogCreateRef} otherRefOfTogglable={blogListRef} labelWhenVisible="cancel" labelWhenHidden="new blog">
+        <BlogCreate user={user} refetchBlogs={fetchBlogs} handleNotification={handleNotification} />
+      </Togglable>
+      <Togglable ref={blogListRef} hasButton={false}>
+        <Blogs refetchBlogs={fetchBlogs} blogs={blogs} />
+      </Togglable>
     </div>
   );
 };
