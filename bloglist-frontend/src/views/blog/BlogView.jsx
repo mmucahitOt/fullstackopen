@@ -7,27 +7,8 @@ import Togglable from '../../components/Togglable'
 const BlogView = ({ user, handleTitleChange, handleNotification }) => {
   const blogCreateRef = useRef()
   const blogListRef = useRef()
-  const [mode, setMode] = useState('list')
 
   const [blogs, setBlogs] = useState([])
-
-  useEffect(() => {
-    handleTitleChange('blogs')
-  }, [handleTitleChange])
-
-  useEffect(() => {
-    fetchBlogs()
-  }, [user, fetchBlogs])
-
-  useEffect(() => {
-    if (mode === 'create') {
-      blogCreateRef.current.handleVisibility(true)
-      blogListRef.current.handleVisibility(false)
-    } else {
-      blogCreateRef.current.handleVisibility(false)
-      blogListRef.current.handleVisibility(true)
-    }
-  }, [mode, blogCreateRef, blogListRef])
 
   const fetchBlogs = useCallback(async (sortByLikes = true) => {
     try {
@@ -40,7 +21,20 @@ const BlogView = ({ user, handleTitleChange, handleNotification }) => {
       console.error(error)
       handleNotification({ message: error.response.data.error, type: 'error' })
     }
-  }, [user.token, handleNotification])
+  }, [])
+
+  useEffect(() => {
+    handleTitleChange('blogs')
+  }, [handleTitleChange])
+
+  useEffect(() => {
+    fetchBlogs()
+  }, [user, fetchBlogs])
+
+  useEffect(() => {
+    blogCreateRef.current.handleVisibility(false)
+    blogListRef.current.handleVisibility(true)
+  }, [])
 
   return (
     <div>

@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
-import Form from '../../components/common/form/Form'
-import FormInput from '../../components/common/form/FormInput'
 import { login } from '../../services/authService'
+import LoginForm from './components/LoginForm'
 
 const LoginView = ({ populateLoggedInUser, handleNotification, handleTitleChange }) => {
   const [username, setUsername] = useState('')
@@ -24,12 +23,7 @@ const LoginView = ({ populateLoggedInUser, handleNotification, handleTitleChange
     }
   }, [username, password, handleNotification, populateLoggedInUser])
 
-  return (
-    <Form formTitle='Login' formProps={{ onSubmit: handleLogin }} buttonText='Login' buttonProps={{ type: 'submit' }}>
-      <FormInput inputDivProps={{ className: 'form-group' }} inputProps={{ label: 'Username', type: 'text', name: 'username', value: username, onChange: ({ target }) => setUsername(target.value) }} />
-      <FormInput inputDivProps={{ className: 'form-group' }} inputProps={{ label: 'Password', type: 'password', name: 'password', value: password, onChange: ({ target }) => setPassword(target.value) }} />
-    </Form>
-  )
+  return <LoginForm handleLogin={handleLogin} username={username} password={password} setUsername={setUsername} setPassword={setPassword} />
 }
 
 export default LoginView

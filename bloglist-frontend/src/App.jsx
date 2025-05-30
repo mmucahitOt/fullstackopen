@@ -43,7 +43,7 @@ const App = () => {
       <Notification message={notification?.message} type={notification?.type} />
 
       {user && <Text style={{ marginBottom: '10px' }} text={user.username + ' logged in'} />}
-      {user && <LogoutForm handleLogout={handleUserLogout} />}
+      {user && <LogoutForm handleRemoveCurrentUser={handleUserLogout} />}
 
       {!user && <LoginView populateLoggedInUser={populateLoggedInUser} handleTitleChange={handleTitleChange} handleNotification={handleNotification} />}
       {user &&<BlogView user={user} handleTitleChange={handleTitleChange} handleNotification={handleNotification} />}
