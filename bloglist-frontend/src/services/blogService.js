@@ -35,3 +35,12 @@ export const updateBlog = async ({ token, id, updateOptions }) => {
   });
   return response.data;
 };
+
+export const deleteBlog = async ({ token, id }) => {
+  const response = await axios.delete(BLOG_API_URL + "/" + id, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};

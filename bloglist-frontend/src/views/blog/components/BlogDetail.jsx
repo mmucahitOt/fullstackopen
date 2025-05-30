@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Text from "../../../components/Text";
-import { updateBlog } from "../../../services/blogService";
+import { updateBlog, deleteBlog } from "../../../services/blogService";
 
 
 const BlogDetail = ({ blog, refetchBlogs, handleNotification, user }) => {
@@ -16,6 +16,22 @@ const BlogDetail = ({ blog, refetchBlogs, handleNotification, user }) => {
       handleNotification({ message: error.response.data.error, type: "error" });
     }
   };
+
+  const handleRemove = async () => {
+    try {
+      const verifyRemove = window.confirm(`Remove blog ${blog.title} by ${blog.author}?`);
+      if (!verifyRemove) {
+        return;
+      }
+      await deleteBlog({ token: user.token, id: blog.id });
+      handleNotification({ message: "Blog deleted successfully", type: "success" });
+      await refetchBlogs();
+    } catch (error) {
+      console.log("error", error);
+      handleNotification({ message: error.response.data.error, type: "error" });
+    }
+  };
+
   return (
     <div style={{ paddingTop: 10, paddingLeft: 2, border: "solid", borderWidth: 1, marginBottom: 5 }}>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -29,6 +45,7 @@ const BlogDetail = ({ blog, refetchBlogs, handleNotification, user }) => {
           <button onClick={() => handleLike()}>like</button>
         </div>
         <Text as="p" style={{ margin: "0" }} text={blog.user.name} />
+        <button onClick={() => handleRemove()}>delete</button>
       </div>}
     </div>
   );
