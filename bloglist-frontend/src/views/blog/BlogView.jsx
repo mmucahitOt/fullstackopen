@@ -29,9 +29,12 @@ const BlogView = ({ user, handleTitleChange, handleNotification }) => {
     }
   }, [mode]);
 
-  const fetchBlogs = async () => {
+  const fetchBlogs = async (sortByLikes = true) => {
     try {
-      const blogs = await getAll(user.token);
+      let blogs = await getAll(user.token);
+      if (sortByLikes) {
+        blogs = blogs.sort((a, b) => b.likes - a.likes);
+      }
       setBlogs(blogs);
     } catch (error) {
       console.error(error);
