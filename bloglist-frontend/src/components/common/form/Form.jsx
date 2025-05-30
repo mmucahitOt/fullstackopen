@@ -1,13 +1,15 @@
-const Form = ({ children, formTitle, formProps, buttonText, buttonProps}) => {
-  return   <div>
-  <form {...formProps}>
-    <h3>{formTitle}</h3>
-    {children}
+const Form = ({ children, formTitle, formProps, buttonText, buttonProps }) => {
+  return (
     <div>
-      <button type="submit" {...buttonProps}>{buttonText}</button>
+      <form {...formProps}>
+        <h3>{formTitle}</h3>
+        {children}
+        <div>
+          <button type='submit' {...buttonProps}>{buttonText}</button>
+        </div>
+      </form>
     </div>
-  </form>
-</div>;
-};
+  )
+}
 
-export default Form;
+export default Form

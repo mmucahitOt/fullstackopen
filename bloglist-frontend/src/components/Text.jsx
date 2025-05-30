@@ -1,15 +1,15 @@
 const Text = ({
   text,
-  as = "div",
+  as = 'div',
   style = {},
   ...props
 }) => {
-  const Tag = as;
+  const Tag = as
   return (
     <Tag style={style} {...props}>
       {text}
     </Tag>
-  );
-};
+  )
+}
 
-export default Text;
+export default Text

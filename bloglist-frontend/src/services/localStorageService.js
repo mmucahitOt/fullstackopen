@@ -1,14 +1,14 @@
 const getUser = () => {
-  const user = window.localStorage.getItem("user");
-  return user ? JSON.parse(user) : null;
-};
+  const user = window.localStorage.getItem('user')
+  return user ? JSON.parse(user) : null
+}
 
 const setUser = (user) => {
-  window.localStorage.setItem("user", JSON.stringify(user));
-};
+  window.localStorage.setItem('user', JSON.stringify(user))
+}
 
 const removeUser = () => {
-  window.localStorage.removeItem("user");
-};
+  window.localStorage.removeItem('user')
+}
 
-export default { getUser, setUser, removeUser };
+export default { getUser, setUser, removeUser }
