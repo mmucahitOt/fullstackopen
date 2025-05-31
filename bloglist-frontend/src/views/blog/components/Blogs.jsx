@@ -1,4 +1,5 @@
-import BlogDetail from './BlogDetail'
+import BlogDetail from './BlogDetail/BlogDetail'
+
 
 const Blogs = ({ blogs, handleNotification, refetchBlogs, user }) => {
 

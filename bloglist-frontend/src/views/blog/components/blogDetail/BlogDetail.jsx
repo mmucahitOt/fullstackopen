@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import Text from '../../../components/Text'
-import { updateBlog, deleteBlog } from '../../../services/blogService'
+import Text from '../../../../components/Text'
+import { updateBlog, deleteBlog } from '../../../../services/blogService'
 
 
 const BlogDetail = ({ blog, refetchBlogs, handleNotification, user }) => {

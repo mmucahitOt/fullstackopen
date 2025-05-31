@@ -9,6 +9,7 @@ const BlogView = ({ user, handleTitleChange, handleNotification }) => {
   const blogListRef = useRef()
 
   const [blogs, setBlogs] = useState([])
+  const [fetchError, setFetchError] = useState(null)
 
   const fetchBlogs = useCallback(async (sortByLikes = true) => {
     try {
@@ -18,10 +19,16 @@ const BlogView = ({ user, handleTitleChange, handleNotification }) => {
       }
       setBlogs(blogs)
     } catch (error) {
-      console.error(error)
-      handleNotification({ message: error.response.data.error, type: 'error' })
+      setFetchError(error.response.data.error)
     }
-  }, [])
+  }, [user.token])
+
+  useEffect(() => {
+    if (fetchError) {
+      handleNotification({ message: fetchError, type: 'error' })
+      setFetchError(null)
+    }
+  }, [fetchError, handleNotification])
 
   useEffect(() => {
     handleTitleChange('blogs')
