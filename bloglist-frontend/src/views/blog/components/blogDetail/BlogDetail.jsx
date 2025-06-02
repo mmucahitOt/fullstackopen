@@ -16,8 +16,8 @@ const BlogDetail = ({ blog, refetchBlogs, handleNotification, user }) => {
       if (!verifyRemove) {
         return
       }
-      await deleteBlog({ token: user.token, id: blog.id })
-      handleNotification({ message: 'Blog deleted successfully', type: 'success' })
+      await deleteBlog( { token: user.token, id: blog.id } )
+      handleNotification( { message: 'Blog deleted successfully', type: 'success' } )
       await refetchBlogs()
     } catch (error) {
       console.log('error', error)
@@ -26,8 +26,8 @@ const BlogDetail = ({ blog, refetchBlogs, handleNotification, user }) => {
   }
 
   return (
-    <div style={{ paddingTop: 10, paddingLeft: 2, border: 'solid', borderWidth: 1, marginBottom: 5 }}>
-      <div style={{ display: 'flex'}}>
+    <div style={ { paddingTop: 10, paddingLeft: 2, border: 'solid', borderWidth: 1, marginBottom: 5 } }>
+      <div style={ { display: 'flex' } }>
         <Text as='p' style={{ margin: '0' }} text={`${blog.title} ${blog.author}`} />
         <button onClick={() => setIsExpanded(!isExpanded)}>{isExpanded ? 'hide' : 'view'}</button>
       </div>
