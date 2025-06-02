@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react'
-import { test, expect, describe } from 'vitest'
+import { test, expect, describe, vi } from 'vitest'
 import BlogDetail from '../BlogDetail/BlogDetail'
 import userEvent from '@testing-library/user-event'
 
@@ -55,4 +55,39 @@ test('shows url and user name when expanded', async () => {
 
   const userNameElement = screen.getByText(blog.user.name)
   expect(userNameElement).toBeDefined()
+})
+
+test('clicking like button increases likes', async () => {
+  const blog = {
+    id: '1',
+    title: 'Test Blog',
+    author: 'Test Author',
+    url: 'https://test.com',
+    likes: 0,
+    user: {
+      name: 'Test User'
+    }
+  }
+
+  const mockHandler = vi.fn(() => {
+    blog.likes++
+  })
+  const user = userEvent.setup()
+
+  const container = render(<BlogDetail blog={blog} handleLike={mockHandler} />)
+
+  const viewButton = screen.getByText('view')
+
+  await user.click(viewButton)
+
+  const likesButton = screen.getByText('like')
+  likesButton.onclick = mockHandler
+
+  await user.click(likesButton)
+  await user.click(likesButton)
+
+  container.debug()
+
+  expect(mockHandler).toHaveBeenCalledTimes(2)
+  expect(blog.likes).toBe(2)
 })

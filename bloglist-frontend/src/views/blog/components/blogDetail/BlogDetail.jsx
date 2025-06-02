@@ -7,14 +7,7 @@ const BlogDetail = ({ blog, refetchBlogs, handleNotification, user }) => {
   const [isExpanded, setIsExpanded] = useState(false)
 
   const handleLike = async () => {
-    try {
-      await updateBlog({ token: user.token, id: blog.id, updateOptions: { likes: blog.likes + 1 } })
-      handleNotification({ message: 'Blog liked successfully', type: 'success' })
-      await refetchBlogs()
-    } catch (error) {
-      console.log('error', error)
-      handleNotification({ message: error.response.data.error, type: 'error' })
-    }
+
   }
 
   const handleRemove = async () => {
@@ -34,13 +27,13 @@ const BlogDetail = ({ blog, refetchBlogs, handleNotification, user }) => {
 
   return (
     <div style={{ paddingTop: 10, paddingLeft: 2, border: 'solid', borderWidth: 1, marginBottom: 5 }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+      <div style={{ display: 'flex'}}>
         <Text as='p' style={{ margin: '0' }} text={`${blog.title} ${blog.author}`} />
         <button onClick={() => setIsExpanded(!isExpanded)}>{isExpanded ? 'hide' : 'view'}</button>
       </div>
       {isExpanded && <div>
         <a href={blog.url} target='_blank' rel='noopener noreferrer'>{blog.url}</a>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex'}}>
           <Text as='p' style={{ margin: '0' }} text={blog.likes} />
           <button onClick={() => handleLike()}>like</button>
         </div>
