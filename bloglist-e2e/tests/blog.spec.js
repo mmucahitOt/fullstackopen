@@ -5,6 +5,7 @@ const {
   describe,
   afterAll,
 } = require("@playwright/test");
+const { createBlog, loginWith } = require("../helpers/helper");
 
 describe("Blog app", () => {
   const user = {
@@ -13,22 +14,17 @@ describe("Blog app", () => {
     password: "testpassword",
   };
   beforeEach(async ({ page, request }) => {
-    await page.goto("http://localhost:5173");
-    await request.post("http://localhost:3001/api/testing/create-user", {
+    await request.post("http://localhost:3001/api/testing/reset");
+    await request.post("http://localhost:3001/api/users", {
       data: {
         username: user.username,
         name: user.name,
         password: user.password,
       },
     });
-    await page.getByRole("textbox", { name: "Username" }).fill(user.username);
-    await page.getByRole("textbox", { name: "Password" }).fill(user.password);
 
-    const loginButton = page.getByRole("button", { name: "Login" });
-    await expect(loginButton).toBeEnabled();
-
-    await loginButton.click();
-    await page.waitForLoadState("networkidle");
+    await page.goto("http://localhost:5173");
+    await loginWith({ page, username: user.username, password: user.password });
   });
 
   afterAll(async ({ request }) => {
@@ -60,6 +56,17 @@ describe("Blog app", () => {
       await page.getByRole("button", { name: "Like" }).click();
       await page.waitForLoadState("networkidle");
       await expect(page.getByText("1")).toBeVisible();
+    });
+
+    test("A blog can be deleted", async ({ page }) => {
+      await page.getByRole("button", { name: "View" }).click();
+      await page.getByRole("button", { name: "Delete" }).click();
+      page.on("dialog", async (dialog) => {
+        expect(dialog.type()).toBe("confirm");
+        await dialog.accept();
+        await page.waitForLoadState("networkidle");
+        await expect(page.getByText(newBlog.title)).not.toBeVisible();
+      });
     });
   });
 });
