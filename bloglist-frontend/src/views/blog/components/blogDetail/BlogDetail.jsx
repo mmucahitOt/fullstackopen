@@ -7,7 +7,13 @@ const BlogDetail = ({ blog, refetchBlogs, handleNotification, user }) => {
   const [isExpanded, setIsExpanded] = useState(false)
 
   const handleLike = async () => {
-
+    try {
+      await updateBlog({ token: user.token, id: blog.id, updateOptions: { likes: blog.likes + 1 } })
+      await refetchBlogs()
+    } catch (error) {
+      console.log('error', error)
+      handleNotification({ message: error.response.data.error, type: 'error' })
+    }
   }
 
   const handleRemove = async () => {

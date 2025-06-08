@@ -3,7 +3,7 @@ const {
   expect,
   beforeEach,
   describe,
-  afterEach,
+  afterAll,
 } = require("@playwright/test");
 
 describe("Blog app", () => {
@@ -31,17 +31,17 @@ describe("Blog app", () => {
     await page.waitForLoadState("networkidle");
   });
 
-  afterEach(async ({ page, request }) => {
+  afterAll(async ({ request }) => {
     await request.post("http://localhost:3001/api/testing/reset-database");
   });
 
   describe("When logged in", () => {
+    const newBlog = {
+      title: "Test Blog",
+      author: "Test Author",
+      url: "https://test.com",
+    };
     test("A blog can be created", async ({ page }) => {
-      const newBlog = {
-        title: "Test Blog",
-        author: "Test Author",
-        url: "https://test.com",
-      };
       await page.getByRole("button", { name: "New blog" }).click();
       await page.getByRole("textbox", { name: "Title" }).fill(newBlog.title);
       await page.getByRole("textbox", { name: "Author" }).fill(newBlog.author);
@@ -53,6 +53,13 @@ describe("Blog app", () => {
       await expect(
         page.getByRole("heading", { name: newBlog.title })
       ).not.toBeVisible();
+    });
+
+    test("A blog can be liked", async ({ page }) => {
+      await page.getByRole("button", { name: "View" }).click();
+      await page.getByRole("button", { name: "Like" }).click();
+      await page.waitForLoadState("networkidle");
+      await expect(page.getByText("1")).toBeVisible();
     });
   });
 });
