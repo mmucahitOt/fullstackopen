@@ -33,7 +33,7 @@ const BlogDetail = ({ blog, refetchBlogs, handleNotification, user }) => {
       </div>
       {isExpanded && <div>
         <a href={blog.url} target='_blank' rel='noopener noreferrer'>{blog.url}</a>
-        <div style={{ display: 'flex'}}>
+        <div style={ { display: 'flex' } }>
           <Text as='p' style={{ margin: '0' }} text={blog.likes} />
           <button onClick={() => handleLike()}>like</button>
         </div>
