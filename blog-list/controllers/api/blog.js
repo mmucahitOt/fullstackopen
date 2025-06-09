@@ -7,11 +7,8 @@ const { userIdExtractor } = require("../../utils/middleware");
 blogRouter.use(userIdExtractor);
 
 blogRouter.get("/", async (request, response, next) => {
-  const userId = request.userId;
   try {
-    const blogs = await Blog.find({
-      user: new mongoose.Types.ObjectId(userId),
-    }).populate("user", {
+    const blogs = await Blog.find({}).populate("user", {
       username: 1,
       name: 1,
       id: 1,
@@ -68,29 +65,16 @@ blogRouter.delete("/:id", async (request, response, next) => {
   }
 });
 
-blogRouter.put("/:id", async (request, response, next) => {
+blogRouter.put("/like/:id", async (request, response, next) => {
   try {
-    const userId = request.userId;
-
     const blog = await Blog.findById(request.params.id);
     if (!blog) {
       return response.status(404).json({ error: "Blog not found" });
     }
 
-    if (blog.user.toString() !== userId) {
-      return response.status(401).json({ error: "Unauthorized" });
-    }
-
     const updatedBlog = await Blog.findByIdAndUpdate(
       request.params.id,
-      {
-        $set: {
-          title: request.body.title || undefined,
-          author: request.body.author || undefined,
-          url: request.body.url || undefined,
-          likes: request.body.likes || undefined,
-        },
-      },
+      { $inc: { likes: 1 } },
       { new: true }
     );
     response.json(updatedBlog);

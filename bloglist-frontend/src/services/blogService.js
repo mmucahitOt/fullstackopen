@@ -44,3 +44,12 @@ export const deleteBlog = async ({ token, id }) => {
   })
   return response.data
 }
+
+export const likeBlog = async ({ token, id }) => {
+  const response = await axios.put(BLOG_API_URL + '/like/' + id, undefined, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+  return response.data
+}
