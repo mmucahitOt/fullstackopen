@@ -1,8 +1,8 @@
-POST http://localhost:3001/api/testing/reset-database
+POST http://localhost:3001/testing/reset-database
 
 ###
 
-POST http://localhost:3001/api/testing/create-user
+POST http://localhost:3001/testing/create-user
 Content-Type: application/json
 
 {

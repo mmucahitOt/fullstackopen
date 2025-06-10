@@ -27,7 +27,7 @@ app.use(express.json());
 app.use(middleware.requestLogger);
 
 if (config.NODE_ENV === "test") {
-  app.use("/api/testing", testRouter);
+  app.use("/testing", testRouter);
 }
 app.use("/auth", authRouter);
 app.use("/api", apiRouter);

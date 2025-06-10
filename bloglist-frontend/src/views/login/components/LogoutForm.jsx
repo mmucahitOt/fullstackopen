@@ -8,8 +8,7 @@ const LogOutForm = ({ handleRemoveCurrentUser }) => {
     handleRemoveCurrentUser(null)
   }
   return (
-    <Form formTitle='Logout' formProps={{ onSubmit: handleLogout }} buttonText='Logout' buttonProps={{ type: 'submit' }}>
-    </Form>
+    <button onClick={handleLogout}>logout</button>
   )
 }
 
