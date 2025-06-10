@@ -5,20 +5,37 @@ const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
 
 testRouter.post("/create-user", async (request, response) => {
-  const { username, name, password } = request.body;
+  const { username, name, password, id, blogs } = request.body;
   const passwordHash = await bcrypt.hash(password, 10);
-  const user = new User({ username, name, passwordHash });
+  const userOptions = { username, name, passwordHash };
+  if (id) {
+    userOptions._id = new mongoose.Types.ObjectId(id);
+  }
+  if (blogs) {
+    userOptions.blogs = blogs.map((blog) => new mongoose.Types.ObjectId(blog));
+  } else {
+    userOptions.blogs = [];
+  }
+  const user = new User(userOptions);
   await user.save();
   response.json(user);
 });
 
 testRouter.post("/create-blog", async (request, response) => {
-  const { title, author, url, userId } = request.body;
+  const { title, author, url, userId, id, likes } = request.body;
+  const blogOptions = { title, author, url };
+  if (userId) {
+    blogOptions.user = new mongoose.Types.ObjectId(userId);
+  }
+  if (id) {
+    blogOptions._id = new mongoose.Types.ObjectId(id);
+  }
   const blog = new Blog({
     title,
     author,
     url,
     user: new mongoose.Types.ObjectId(userId),
+    likes: likes || 0,
   });
   await blog.save();
   response.json(blog);
