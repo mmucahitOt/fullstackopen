@@ -1,16 +1,4 @@
-export const createEvent = (content) => {
-  return {
-    type: "NEW_ANECDOTE",
-    data: content,
-  };
-};
-
-export const voteEvent = (id) => {
-  return {
-    type: "VOTE",
-    data: { id },
-  };
-};
+import { createSlice, createSelector } from "@reduxjs/toolkit";
 
 const anecdotesAtStart = [
   "If it hurts, do it more often",
@@ -33,19 +21,41 @@ const asObject = (anecdote) => {
 
 const initialState = anecdotesAtStart.map(asObject);
 
-const reducer = (state = initialState, action) => {
-  switch (action.type) {
-    case "NEW_ANECDOTE":
-      return [...state, asObject(action.data)];
-    case "VOTE":
-      return state.map((anecdote) =>
-        anecdote.id === action.data.id
-          ? { ...anecdote, votes: anecdote.votes + 1 }
-          : anecdote
-      );
-    default:
-      return state;
-  }
-};
+const anecdoteSlice = createSlice({
+  name: "anecdotes",
+  initialState,
+  reducers: {
+    createAnecdote: (state, action) => {
+      state.push(asObject(action.payload.content));
+    },
+    voteAnecdote: (state, action) => {
+      const anecdote = state.find((a) => a.id === action.payload.id);
+      anecdote.votes++;
+    },
+  },
+});
 
-export default reducer;
+// Selectors
+export const selectAllAnecdotes = (state) => state.anecdotes;
+
+export const selectAnecdoteById = createSelector(
+  [selectAllAnecdotes, (state, id) => id],
+  (anecdotes, id) => [...anecdotes].find((anecdote) => anecdote.id === id)
+);
+
+export const selectAnecdotesByVotes = createSelector(
+  [selectAllAnecdotes],
+  (anecdotes) => [...anecdotes].sort((a, b) => b.votes - a.votes)
+);
+
+export const selectAnecdotesByFilter = createSelector(
+  [selectAllAnecdotes, (state) => state.filter],
+  (anecdotes, filter) =>
+    [...anecdotes].filter((anecdote) =>
+      anecdote.content.toLowerCase().includes(filter.toLowerCase())
+    )
+);
+
+export const { createAnecdote, voteAnecdote } = anecdoteSlice.actions;
+
+export default anecdoteSlice.reducer;
