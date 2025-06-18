@@ -5,10 +5,11 @@ const notificationSlice = createSlice({
   initialState: "render here notification...",
   reducers: {
     setNotification: (_, action) => action.payload,
+    clearNotification: () => "",
   },
 });
 
-export const { setNotification } = notificationSlice.actions;
+export const { setNotification, clearNotification } = notificationSlice.actions;
 
 export const selectNotification = (state) => state.notification;
 
