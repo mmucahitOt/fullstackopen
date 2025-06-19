@@ -9,7 +9,6 @@ import { useDispatch } from 'react-redux'
 const App = () => {
   const dispatch = useDispatch()
   useEffect(() => {
-    console.log("App")
     dispatch(initializeAnecdotes())
   }, [])
   
