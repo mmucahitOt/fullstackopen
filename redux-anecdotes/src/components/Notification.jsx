@@ -4,22 +4,23 @@ import { selectNotification, clearNotification } from "../reducers/notificationR
 const Notification = () => {
   const dispatch = useDispatch()
 
-  const notification = useSelector(selectNotification)
+  const {message, timeoutDuration} = useSelector(selectNotification)
+  
   const style = {
     border: 'solid',
     padding: 10,
     borderWidth: 1
   }
 
-  if (notification) {
+  if (message) {
     setTimeout(() => {
       dispatch(clearNotification())
-    }, 5000)
+    }, timeoutDuration)
   }
 
-  return (
-    <div style={notification ? style : { display: "none" }}>
-      {notification}
+  return (  
+    <div style={message ? style : { display: "none" }}>
+      {message}
     </div>
   )
 }
