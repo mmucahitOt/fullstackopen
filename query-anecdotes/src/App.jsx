@@ -20,22 +20,21 @@ const App = () => {
   })
 
   useEffect(() => {
-    if (queryResult.isLoading) {
-      setNotification('loading data...')
-    }
-  }, [queryResult.isLoading, setNotification])
-
-  useEffect(() => {
     if (queryResult.isError) {
-      setNotification("anecdote service not available due to problems in server")
+      setNotification(queryResult.error.message)
     }
   }, [queryResult.isError, queryResult.error, setNotification])
+
+
+  if (queryResult.isLoading) {
+    return <div>loading data...</div>
+  }
   
   return (
     <div>
       <h3>Anecdote app</h3>
       <Notification notification={notification} setNotification={setNotification} />
-      <AnecdoteForm />
+      <AnecdoteForm setNotification={setNotification} />
       {queryResult.data && queryResult.data.map(anecdote =>
         <div key={anecdote.id}>
           <div>

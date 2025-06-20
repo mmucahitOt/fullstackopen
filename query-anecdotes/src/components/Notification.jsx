@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 
-const Notification = ({ notification, setNotification, timeoutDuration = 5 }) => {
+const Notification = ({ notification, setNotification, timeoutDuration = 3}) => {
   const style = {
     border: 'solid',
     padding: 10,
