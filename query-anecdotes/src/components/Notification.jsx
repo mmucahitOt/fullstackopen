@@ -1,6 +1,9 @@
-import PropTypes from 'prop-types'
 
-const Notification = ({ notification, setNotification, timeoutDuration = 3}) => {
+import { useNotificationValue, useNotificationDispatch } from '../hooks/useNotification'
+
+const Notification = () => {
+  const notification = useNotificationValue()
+  const notificationDispatch = useNotificationDispatch()
   const style = {
     border: 'solid',
     padding: 10,
@@ -9,8 +12,8 @@ const Notification = ({ notification, setNotification, timeoutDuration = 3}) => 
   }
   
   setTimeout(() => {
-    setNotification('')
-  }, timeoutDuration * 1000)
+    notificationDispatch({ type: 'REMOVE_NOTIFICATION' })
+  }, 5 * 1000)
 
   if (!notification) {
     return null
@@ -21,12 +24,6 @@ const Notification = ({ notification, setNotification, timeoutDuration = 3}) => 
       {notification}
     </div>
   )
-}
-
-Notification.propTypes = {
-  notification: PropTypes.string.isRequired,
-  setNotification: PropTypes.func.isRequired,
-  timeoutDuration: PropTypes.number
 }
 
 export default Notification

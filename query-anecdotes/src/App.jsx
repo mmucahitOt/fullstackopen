@@ -3,18 +3,30 @@ import AnecdoteForm from './components/AnecdoteForm'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import Notification from './components/Notification'
 import anecdoteService from './services/anecdoteService'
+import { useNotificationDispatch } from './hooks/useNotification'
 
 const App = () => {
   const queryClient = useQueryClient()
-  const [notification, setNotification] = useState('')
+  const notificationDispatch = useNotificationDispatch()
 
   const voteMutation = useMutation({
     mutationFn: (anecdote) => {
       return anecdoteService.vote(anecdote.id)
     },
-    onSuccess: () => {
+    onSuccess: (anecdote) => {
+      notificationDispatch({ type: 'SET_NOTIFICATION', payload: `you voted for '${anecdote.content}'` })
       queryClient.invalidateQueries({ queryKey: ['anecdotes'] })
-    }
+    },
+    onError: (error) => {
+      if (error.response.data.error) {
+        notificationDispatch({ type: 'SET_NOTIFICATION', payload: error.response.data.error })
+      }
+      else if (error.message) {
+        notificationDispatch({ type: 'SET_NOTIFICATION', payload: error.message })
+      } else {
+        notificationDispatch({ type: 'SET_NOTIFICATION', payload: 'An error occurred' })
+      }
+    },
   })
 
   const queryResult = useQuery({
@@ -22,24 +34,11 @@ const App = () => {
     queryFn: () => {
       return anecdoteService.getAll()
     },
-    retry: false
+    retry: false,
   })
-
-  useEffect(() => {
-    if (queryResult.isError) {
-      setNotification(queryResult.error.message)
-    }
-  }, [queryResult.isError, queryResult.error, setNotification])
-
-  useEffect(() => {
-    if (voteMutation.isError) {
-      setNotification(voteMutation.error.response.data.error)
-    }
-  }, [voteMutation.isError, voteMutation.error, setNotification])
 
   const handleVote = (anecdote) => {
     voteMutation.mutate(anecdote)
-    setNotification(`you voted for '${anecdote.content}'`)
   }
 
   if (queryResult.isLoading) {
@@ -50,8 +49,8 @@ const App = () => {
   return (
     <div>
       <h3>Anecdote app</h3>
-      <Notification notification={notification} setNotification={setNotification} />
-      <AnecdoteForm setNotification={setNotification} />
+      <Notification />
+      <AnecdoteForm />
       {queryResult.data && queryResult.data.map(anecdote =>
         <div key={anecdote.id}>
           <div>

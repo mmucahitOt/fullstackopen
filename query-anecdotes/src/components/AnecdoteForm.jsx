@@ -2,14 +2,26 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import anecdoteService from '../services/anecdoteService'
 import { useEffect } from 'react'
 import PropTypes from 'prop-types'
+import { useNotificationDispatch } from '../hooks/useNotification'
 
-const AnecdoteForm = ({setNotification}) => {
+const AnecdoteForm = () => {
   const queryClient = useQueryClient()
+  const notificationDispatch = useNotificationDispatch()
   
   const newAnecdoteMutation = useMutation({
     mutationFn: anecdoteService.createNew,
-    onSuccess: () => {
+    onSuccess: (anecdote) => {
+      notificationDispatch({ type: 'SET_NOTIFICATION', payload: `a new anecdote '${anecdote.content}' created!` })
       queryClient.invalidateQueries({ queryKey: ['anecdotes'] })
+    },
+    onError: (error) => {
+      if (error.response.data.error) {
+        notificationDispatch({ type: 'SET_NOTIFICATION', payload: error.response.data.error })
+      } else if (error.message) {
+        notificationDispatch({ type: 'SET_NOTIFICATION', payload: error.message })
+      } else {
+        notificationDispatch({ type: 'SET_NOTIFICATION', payload: 'An error occurred' })
+      }
     },
     retry: false
   })
@@ -18,17 +30,11 @@ const AnecdoteForm = ({setNotification}) => {
     event.preventDefault()
     const content = event.target.anecdote.value
     newAnecdoteMutation.mutate(content)
-    setNotification(`a new anecdote ${content} created!`)
     event.target.anecdote.value = ''
     
   }
-  
-  useEffect(() => {
-    if (newAnecdoteMutation.isError) {
-      setNotification(newAnecdoteMutation.error.response.data.error)
-    }
-  }, [newAnecdoteMutation.isError, newAnecdoteMutation.error, setNotification])
 
+  
   return (
     <div>
       <h3>create new</h3>
