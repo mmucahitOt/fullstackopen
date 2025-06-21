@@ -5,6 +5,25 @@ import {
   useNavigate
 } from 'react-router-dom'
 
+const Notification = ({notification, setNotification}) => {
+  const style = {
+    border: 'solid',
+    padding: 10,
+    borderWidth: 1
+  }
+
+  if (notification) {
+    setTimeout(() => {
+      setNotification('')
+    }, 5000)
+  }
+
+  return (  
+    <div style={notification ? style : { display: "none" }}>
+      {notification}
+    </div>
+  )
+}
 
 const Menu = () => {
   const padding = {
@@ -32,7 +51,6 @@ const AnecdoteList = ({ anecdotes }) => {
 }
 
 const Anecdote = ({ anecdote }) => {
-  console.log('anecdote details ', anecdote)
   return (
     <div>
       <h2>{anecdote.content}</h2>
@@ -70,7 +88,7 @@ const CreateNew = (props) => {
   const [content, setContent] = useState('')
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')
-
+  const navigate = useNavigate()
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -80,6 +98,8 @@ const CreateNew = (props) => {
       info,
       votes: 0
     })
+    props.setNotification(`a new anecdote ${content} created!`)
+    navigate('/')
   }
 
   return (
@@ -148,16 +168,15 @@ const App = () => {
 
   const anecdote = anecdoteById(Number(id))
 
-  console.log('anecdote id ', id)
-  console.log('filteredAnecdote ', anecdote)
   return (
     <div>
       <h1>Software anecdotes</h1>
       <Menu />
+      <Notification notification={notification} setNotification={setNotification} />
       <Routes>
         <Route path='/' element={<AnecdoteList anecdotes={anecdotes} />} />
         <Route path='/about' element={<About />} />
-        <Route path='/create' element={<CreateNew addNew={addNew} />} />
+        <Route path='/create' element={<CreateNew addNew={addNew} setNotification={setNotification} />} />
         <Route path='/anecdotes/:id' element={<Anecdote anecdote={anecdote}/>} />
       </Routes>
       <Footer />
