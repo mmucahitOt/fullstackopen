@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import {
-  Routes, Route, Link
+  Routes, Route, Link,
+  useMatch,
+  useNavigate
 } from 'react-router-dom'
 
 
@@ -17,14 +19,30 @@ const Menu = () => {
   )
 }
 
-const AnecdoteList = ({ anecdotes }) => (
+const AnecdoteList = ({ anecdotes }) => {
+  const navigate = useNavigate()
+  return (
   <div>
     <h2>Anecdotes</h2>
     <ul>
-      {anecdotes.map(anecdote => <li key={anecdote.id} >{anecdote.content}</li>)}
+      {anecdotes.map(anecdote => <li key={anecdote.id} onClick={() => navigate(`/anecdotes/${anecdote.id}`)}>{anecdote.content}</li>)}
     </ul>
   </div>
-)
+  )
+}
+
+const Anecdote = ({ anecdote }) => {
+  console.log('anecdote details ', anecdote)
+  return (
+    <div>
+      <h2>{anecdote.content}</h2>
+      <p>has {anecdote.votes} votes</p>
+      <p>
+        for more info see <a href={anecdote.info}>{anecdote.info}</a>
+      </p>
+    </div>
+  )
+}
 
 const About = () => (
   <div>
@@ -106,6 +124,8 @@ const App = () => {
   ])
 
   const [notification, setNotification] = useState('')
+  const match = useMatch('/anecdotes/:id')
+  const id = match ? match.params.id : null
 
   const addNew = (anecdote) => {
     anecdote.id = Math.round(Math.random() * 10000)
@@ -126,6 +146,10 @@ const App = () => {
     setAnecdotes(anecdotes.map(a => a.id === id ? voted : a))
   }
 
+  const anecdote = anecdoteById(Number(id))
+
+  console.log('anecdote id ', id)
+  console.log('filteredAnecdote ', anecdote)
   return (
     <div>
       <h1>Software anecdotes</h1>
@@ -134,6 +158,7 @@ const App = () => {
         <Route path='/' element={<AnecdoteList anecdotes={anecdotes} />} />
         <Route path='/about' element={<About />} />
         <Route path='/create' element={<CreateNew addNew={addNew} />} />
+        <Route path='/anecdotes/:id' element={<Anecdote anecdote={anecdote}/>} />
       </Routes>
       <Footer />
     </div>
