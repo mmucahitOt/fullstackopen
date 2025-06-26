@@ -1,16 +1,13 @@
 import { useState, useContext } from 'react'
 import Text from '../../../../components/Text'
-import { useDispatch, useSelector } from 'react-redux'
-import { selectUser } from '../../../../slices/userSlice'
 import { BlogContext } from '../../../../providers/BlogContextProvider'
+import { UserContext } from '../../../../providers/UserContextProvider'
 
 const BlogDetail = ({ blog }) => {
   const { likeBlog, deleteBlog } = useContext(BlogContext)
-  const dispatch = useDispatch()
   const [isExpanded, setIsExpanded] = useState(false)
 
-  const user = useSelector(selectUser)
-  const { token } = user
+  const { user } = useContext(UserContext)
   // If blog is null, don't render anything
   if (!blog) {
     return null

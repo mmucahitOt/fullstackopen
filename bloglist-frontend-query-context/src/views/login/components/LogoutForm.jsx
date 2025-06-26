@@ -1,12 +1,12 @@
 import localStorageService from '../../../services/localStorageService'
-import { useDispatch } from 'react-redux'
-import { clearUser } from '../../../slices/userSlice'
+import { useContext } from 'react'
+import { UserContext } from '../../../providers/UserContextProvider'
 
 const LogOutForm = () => {
-  const dispatch = useDispatch()
+  const { removeUser } = useContext(UserContext)
   const handleLogout = async () => {
     localStorageService.removeUser()
-    dispatch(clearUser())
+    removeUser()
   }
   return <button onClick={handleLogout}>logout</button>
 }

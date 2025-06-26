@@ -1,27 +1,16 @@
-import { useState, useEffect, useContext } from 'react'
-import localStorageService from './services/localStorageService'
+import { useContext } from 'react'
 import LoginView from './views/login/LoginView'
 import Notification from './components/Notification'
 import BlogView from './views/blog/BlogView'
 import LogoutForm from './views/login/components/LogoutForm'
 import Text from './components/Text'
-import { useDispatch, useSelector } from 'react-redux'
-import { selectUser } from './slices/userSlice'
-import { setUser } from './slices/userSlice'
 import { TitleContext } from './providers/TitleContextProvider'
 import { BlogContextProvider } from './providers/BlogContextProvider'
+import { UserContext } from './providers/UserContextProvider'
 
 const App = () => {
-  const dispatch = useDispatch()
-  const user = useSelector(selectUser)
+  const { user } = useContext(UserContext)
   const { title } = useContext(TitleContext)
-
-  useEffect(() => {
-    const user = localStorageService.getUser()
-    if (user) {
-      dispatch(setUser(user))
-    }
-  }, [])
 
   return (
     <div>

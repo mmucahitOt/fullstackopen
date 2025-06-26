@@ -1,14 +1,11 @@
 import { useCallback, useEffect, useState, useContext } from 'react'
 import LoginForm from './components/LoginForm'
-import { useDispatch } from 'react-redux'
-import { loginUser } from '../../slices/userSlice'
-import { NotificationContext } from '../../providers/NotificationContextProvider'
 import { TitleContext } from '../../providers/TitleContextProvider'
+import { UserContext } from '../../providers/UserContextProvider'
 
 const LoginView = () => {
-  const { handleNotification } = useContext(NotificationContext)
   const { handleTitle } = useContext(TitleContext)
-  const dispatch = useDispatch()
+  const { loginUser } = useContext(UserContext)
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -20,9 +17,9 @@ const LoginView = () => {
   const handleLogin = useCallback(
     (event) => {
       event.preventDefault()
-      dispatch(loginUser({ username, password }, handleNotification))
+      loginUser.mutate({ username, password })
     },
-    [username, password, dispatch, handleNotification]
+    [username, password, loginUser]
   )
 
   return (

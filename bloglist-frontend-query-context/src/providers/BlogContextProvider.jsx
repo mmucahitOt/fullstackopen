@@ -1,7 +1,5 @@
 import { createContext, useReducer, useContext, useMemo, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
-import { useSelector } from 'react-redux'
-import { selectUser } from '../slices/userSlice'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import {
   getAll,
@@ -10,6 +8,7 @@ import {
   deleteBlog as deleteBlogService,
 } from '../services/blogService'
 import { NotificationContext } from './NotificationContextProvider'
+import { UserContext } from './UserContextProvider'
 
 const BlogContext = createContext()
 
@@ -24,10 +23,10 @@ const blogReducer = (state, action) => {
 
 export const BlogContextProvider = ({ children }) => {
   const queryClient = useQueryClient()
-  const { token } = useSelector(selectUser)
+  const { user } = useContext(UserContext)
+  console.log('user', user)
   const { handleNotification } = useContext(NotificationContext)
   const [blogs, blogsDispatch] = useReducer(blogReducer, [])
-  const isInitialLoad = useRef(true)
 
   const setBlogs = (blogs) => {
     blogsDispatch({ type: 'SET_BLOGS', payload: blogs })
@@ -36,10 +35,10 @@ export const BlogContextProvider = ({ children }) => {
   const fetchBlogs = useQuery({
     queryKey: ['blogs'],
     queryFn: async () => {
-      const blogs = await getAll(token)
+      const blogs = await getAll(user.token)
       return blogs
     },
-    enabled: !!token,
+    enabled: !!user.token,
     retry: false,
   })
 
@@ -60,11 +59,11 @@ export const BlogContextProvider = ({ children }) => {
 
   const createBlog = useMutation({
     mutationFn: async (blog) => {
-      const newBlog = await createBlogService({ token, ...blog })
+      const newBlog = await createBlogService({ token: user.token, ...blog })
       return newBlog
     },
-    onSuccess: () => {
-      handleNotification({ message: 'Blog created successfully', type: 'success' })
+    onSuccess: (blog) => {
+      handleNotification({ message: 'Blog named ' + blog.title + ' created', type: 'success' })
       queryClient.invalidateQueries({ queryKey: ['blogs'] })
     },
     onError: (error) => {
@@ -74,7 +73,7 @@ export const BlogContextProvider = ({ children }) => {
 
   const likeBlog = useMutation({
     mutationFn: async (blog) => {
-      const likedBlog = await likeBlogService({ token, id: blog.id })
+      const likedBlog = await likeBlogService({ token: user.token, id: blog.id })
       return likedBlog
     },
     onSuccess: (blog) => {
@@ -88,7 +87,7 @@ export const BlogContextProvider = ({ children }) => {
 
   const deleteBlog = useMutation({
     mutationFn: async (blog) => {
-      const deletedBlog = await deleteBlogService({ token, id: blog.id })
+      const deletedBlog = await deleteBlogService({ token: user.token, id: blog.id })
       return deletedBlog
     },
     onSuccess: (blog) => {
