@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import localStorageService from './services/localStorageService'
 import LoginView from './views/login/LoginView'
 import Notification from './components/Notification'
@@ -8,12 +8,13 @@ import Text from './components/Text'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectUser } from './slices/userSlice'
 import { setUser } from './slices/userSlice'
-import { selectTitle } from './slices/uiSlice'
+import { TitleContext } from './providers/TitleContextProvider'
+import { BlogContextProvider } from './providers/BlogContextProvider'
 
 const App = () => {
   const dispatch = useDispatch()
   const user = useSelector(selectUser)
-  const title = useSelector(selectTitle)
+  const { title } = useContext(TitleContext)
 
   useEffect(() => {
     const user = localStorageService.getUser()
@@ -31,7 +32,11 @@ const App = () => {
       {user && <LogoutForm />}
 
       {!user && <LoginView />}
-      {user && <BlogView />}
+      {user && (
+        <BlogContextProvider>
+          <BlogView />
+        </BlogContextProvider>
+      )}
     </div>
   )
 }

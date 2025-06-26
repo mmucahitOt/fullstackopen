@@ -20,14 +20,14 @@ const notificationReducer = (state, action) => {
 export const NotificationContextProvider = ({ children }) => {
   const [notification, notificationDispatch] = useReducer(notificationReducer, null)
 
-  const handleNotification = ({ message, type }) => {
+  const handleNotification = useCallback(({ message, type }) => {
     console.log('handleNotification', message, type)
     notificationDispatch({ type: 'SET_NOTIFICATION', payload: { message, type } })
-  }
+  }, [])
 
-  const removeNotification = () => {
+  const removeNotification = useCallback(() => {
     notificationDispatch({ type: 'REMOVE_NOTIFICATION' })
-  }
+  }, [])
 
   return (
     <NotificationContext.Provider

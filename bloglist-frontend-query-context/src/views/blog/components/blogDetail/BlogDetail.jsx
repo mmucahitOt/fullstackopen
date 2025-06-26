@@ -1,12 +1,11 @@
 import { useState, useContext } from 'react'
 import Text from '../../../../components/Text'
 import { useDispatch, useSelector } from 'react-redux'
-import { likeBlog, deleteBlog } from '../../../../slices/blogSlice'
 import { selectUser } from '../../../../slices/userSlice'
-import { NotificationContext } from '../../../../providers/NotificationContextProvider'
+import { BlogContext } from '../../../../providers/BlogContextProvider'
 
 const BlogDetail = ({ blog }) => {
-  const { handleNotification } = useContext(NotificationContext)
+  const { likeBlog, deleteBlog } = useContext(BlogContext)
   const dispatch = useDispatch()
   const [isExpanded, setIsExpanded] = useState(false)
 
@@ -18,12 +17,12 @@ const BlogDetail = ({ blog }) => {
   }
 
   const handleLike = () => {
-    dispatch(likeBlog(blog, token, handleNotification))
+    likeBlog(blog)
   }
 
   const handleRemove = () => {
     if (window.confirm('Are you sure you want to delete this blog?')) {
-      dispatch(deleteBlog(blog, token, handleNotification))
+      deleteBlog(blog)
     }
   }
 

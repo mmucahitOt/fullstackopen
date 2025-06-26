@@ -1,14 +1,9 @@
 import { useState, useContext } from 'react'
 import BlogForm from './components/BlogForm'
-import { useSelector, useDispatch } from 'react-redux'
-import { selectUser } from '../../../../slices/userSlice'
-import { createBlog } from '../../../../slices/blogSlice'
-import { NotificationContext } from '../../../../providers/NotificationContextProvider'
+import { BlogContext } from '../../../../providers/BlogContextProvider'
 
 const BlogCreate = () => {
-  const { handleNotification } = useContext(NotificationContext)
-  const dispatch = useDispatch()
-  const { token } = useSelector(selectUser)
+  const { createBlog } = useContext(BlogContext)
 
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
@@ -16,19 +11,10 @@ const BlogCreate = () => {
 
   const handleCreateBlog = async (event) => {
     event.preventDefault()
-
-    dispatch(
-      createBlog(
-        { title, author, url },
-        () => {
-          setTitle('')
-          setAuthor('')
-          setUrl('')
-        },
-        token,
-        handleNotification
-      )
-    )
+    createBlog({ title, author, url })
+    setTitle('')
+    setAuthor('')
+    setUrl('')
   }
 
   return (
