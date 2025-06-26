@@ -1,45 +1,27 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
-import { getAll } from '../../services/blogService';
+import { useEffect, useRef } from 'react';
 import BlogCreate from './components/blogCreate/BlogCreate';
 import Blogs from './components/Blogs';
 import Togglable from '../../components/Togglable';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectUser } from '../../slices/userSlice';
+import { setTitle } from '../../slices/uiSlice';
+import { fetchBlogs } from '../../slices/blogSlice';
 
-const BlogView = ({ user, handleTitleChange, handleNotification }) => {
+const BlogView = () => {
+  const dispatch = useDispatch();
+
   const blogCreateRef = useRef();
   const blogListRef = useRef();
 
-  const [blogs, setBlogs] = useState([]);
-  const [fetchError, setFetchError] = useState(null);
-
-  const fetchBlogs = useCallback(
-    async (sortByLikes = true) => {
-      try {
-        let blogs = await getAll(user.token);
-        if (sortByLikes) {
-          blogs = blogs.sort((a, b) => b.likes - a.likes);
-        }
-        setBlogs(blogs);
-      } catch (error) {
-        setFetchError(error.response.data.error);
-      }
-    },
-    [user.token]
-  );
+  const { token } = useSelector(selectUser);
 
   useEffect(() => {
-    if (fetchError) {
-      handleNotification({ message: fetchError, type: 'error' });
-      setFetchError(null);
-    }
-  }, [fetchError, handleNotification]);
+    dispatch(setTitle('blogs'));
+  }, [dispatch]);
 
   useEffect(() => {
-    handleTitleChange('blogs');
-  }, [handleTitleChange]);
-
-  useEffect(() => {
-    fetchBlogs();
-  }, [user, fetchBlogs]);
+    dispatch(fetchBlogs(token));
+  }, [dispatch, token]);
 
   useEffect(() => {
     blogCreateRef.current.handleVisibility(false);
@@ -51,22 +33,13 @@ const BlogView = ({ user, handleTitleChange, handleNotification }) => {
       <Togglable
         ref={blogCreateRef}
         otherRefOfTogglable={blogListRef}
-        labelWhenVisible='cancel'
-        labelWhenHidden='new blog'
+        labelWhenVisible="cancel"
+        labelWhenHidden="new blog"
       >
-        <BlogCreate
-          user={user}
-          refetchBlogs={fetchBlogs}
-          handleNotification={handleNotification}
-        />
+        <BlogCreate />
       </Togglable>
       <Togglable ref={blogListRef} hasButton={false}>
-        <Blogs
-          refetchBlogs={fetchBlogs}
-          blogs={blogs}
-          handleNotification={handleNotification}
-          user={user}
-        />
+        <Blogs />
       </Togglable>
     </div>
   );

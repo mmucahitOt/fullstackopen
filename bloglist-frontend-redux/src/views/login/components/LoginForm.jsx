@@ -2,19 +2,13 @@ import Form from '../../../components/common/form/Form';
 import FormInput from '../../../components/common/form/FormInput';
 import PropTypes from 'prop-types';
 
-const LoginForm = ({
-  handleLogin,
-  username,
-  password,
-  setUsername,
-  setPassword,
-}) => {
+const LoginForm = ({ handleLogin, username, password, setUsername, setPassword }) => {
   return (
     <>
       <Form
-        formTitle='Login'
+        formTitle="Login"
         formProps={{ onSubmit: handleLogin }}
-        buttonText='Login'
+        buttonText="Login"
         buttonProps={{ type: 'submit' }}
       >
         <FormInput

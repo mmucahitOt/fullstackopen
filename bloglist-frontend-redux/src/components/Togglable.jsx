@@ -27,7 +27,7 @@ const Togglable = forwardRef(
       return isVisible;
     };
 
-    const handleVisibility = visibility => {
+    const handleVisibility = (visibility) => {
       setIsVisible(visibility);
     };
 

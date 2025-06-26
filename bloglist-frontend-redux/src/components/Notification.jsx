@@ -1,25 +1,28 @@
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { selectNotification } from '../slices/uiSlice';
 
-const Notification = props => {
+const Notification = () => {
   const [visible, setVisible] = useState(true);
+  const notification = useSelector(selectNotification);
 
   useEffect(() => {
-    if (props) {
+    if (notification) {
       setVisible(true);
       setTimeout(() => {
         setVisible(false);
       }, 2000);
     }
-  }, [props]);
+  }, [notification]);
 
-  if (!visible || !props.message || !props.type) {
+  if (!visible || !notification) {
     return null;
   }
 
   return (
     <div
       style={{
-        color: props.type === 'error' ? 'red' : 'green',
+        color: notification.type === 'error' ? 'red' : 'green',
         background: 'lightgrey',
         fontSize: '20px',
         borderStyle: 'solid',
@@ -28,7 +31,7 @@ const Notification = props => {
         marginBottom: '10px',
       }}
     >
-      {props.message}
+      {notification.message}
     </div>
   );
 };

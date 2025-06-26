@@ -1,36 +1,24 @@
 import { useCallback, useEffect, useState } from 'react';
-import { login } from '../../services/authService';
 import LoginForm from './components/LoginForm';
+import { useDispatch } from 'react-redux';
+import { loginUser } from '../../slices/userSlice';
+import { setTitle } from '../../slices/uiSlice';
 
-const LoginView = ({
-  populateLoggedInUser,
-  handleNotification,
-  handleTitleChange,
-}) => {
+const LoginView = () => {
+  const dispatch = useDispatch();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   useEffect(() => {
-    handleTitleChange('login in to application');
-  }, [handleTitleChange]);
+    dispatch(setTitle('login in to application'));
+  }, [dispatch]);
 
   const handleLogin = useCallback(
-    async event => {
+    (event) => {
       event.preventDefault();
-      try {
-        const response = await login(username, password);
-        console.log(response);
-        handleNotification({ message: 'Login successful', type: 'success' });
-        populateLoggedInUser(response.data);
-      } catch (error) {
-        console.log('error', error.response.data.error);
-        handleNotification({
-          message: error.response.data.error,
-          type: 'error',
-        });
-      }
+      dispatch(loginUser({ username, password }));
     },
-    [username, password, handleNotification, populateLoggedInUser]
+    [username, password, dispatch]
   );
 
   return (

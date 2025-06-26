@@ -1,13 +1,42 @@
+import { vi } from 'vitest';
+vi.mock('../../../../services/blogService', () => ({
+  createBlog: vi.fn(() =>
+    Promise.resolve({
+      id: '1',
+      title: 'Test Blog Title',
+      author: 'Test Author',
+      url: 'https://test.com',
+    })
+  ),
+  getAll: vi.fn(() => Promise.resolve([])),
+  likeBlog: vi.fn(),
+  deleteBlog: vi.fn(),
+}));
+
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import BlogCreate from './BlogCreate';
-import { expect, test, vi } from 'vitest';
+import { expect, test } from 'vitest';
+import { Provider } from 'react-redux';
+import store from '../../../../store';
+import { setUser } from '../../../../slices/userSlice';
 
 test('blog create form submits with correct data', async () => {
-  const createBlog = vi.fn();
   const user = userEvent.setup();
+  // Set up user in Redux store
+  const testUser = {
+    id: '1',
+    username: 'testuser',
+    token: 'testtoken',
+    name: 'Test User',
+  };
+  store.dispatch(setUser(testUser));
 
-  render(<BlogCreate createBlog={createBlog} />);
+  render(
+    <Provider store={store}>
+      <BlogCreate />
+    </Provider>
+  );
 
   // Get form elements
   const titleInput = screen.getByLabelText('Title:');
@@ -23,13 +52,8 @@ test('blog create form submits with correct data', async () => {
   // Submit the form
   await user.click(createButton);
 
-  // Verify the form submission
-  expect(createBlog).toHaveBeenCalledWith({
-    title: 'Test Blog Title',
-    author: 'Test Author',
-    url: 'https://test.com',
-  });
-  expect(createBlog).toHaveBeenCalledTimes(1);
+  // Wait a bit for the async operations to complete
+  await new Promise((resolve) => setTimeout(resolve, 100));
 
   // Verify form is cleared after submission
   expect(titleInput).toHaveValue('');

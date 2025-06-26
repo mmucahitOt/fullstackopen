@@ -1,17 +1,14 @@
-import Form from '../../../components/common/form/Form';
 import localStorageService from '../../../services/localStorageService';
-import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import { clearUser } from '../../../slices/userSlice';
 
-const LogOutForm = ({ handleRemoveCurrentUser }) => {
+const LogOutForm = () => {
+  const dispatch = useDispatch();
   const handleLogout = async () => {
     localStorageService.removeUser();
-    handleRemoveCurrentUser(null);
+    dispatch(clearUser());
   };
   return <button onClick={handleLogout}>logout</button>;
-};
-
-LogOutForm.propTypes = {
-  handleRemoveCurrentUser: PropTypes.func.isRequired,
 };
 
 export default LogOutForm;

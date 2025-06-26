@@ -3,7 +3,7 @@ const getUser = () => {
   return user ? JSON.parse(user) : null;
 };
 
-const setUser = user => {
+const setUser = (user) => {
   window.localStorage.setItem('user', JSON.stringify(user));
 };
 

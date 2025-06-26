@@ -5,7 +5,7 @@ const Form = ({ children, formTitle, formProps, buttonText, buttonProps }) => {
         <h3>{formTitle}</h3>
         {children}
         <div>
-          <button type='submit' {...buttonProps}>
+          <button type="submit" {...buttonProps}>
             {buttonText}
           </button>
         </div>

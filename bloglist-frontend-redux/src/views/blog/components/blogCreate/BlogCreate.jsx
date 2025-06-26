@@ -1,58 +1,38 @@
 import { useState } from 'react';
-import { createBlog } from '../../../../services/blogService';
 import BlogForm from './components/BlogForm';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectUser } from '../../../../slices/userSlice';
+import { createBlog } from '../../../../slices/blogSlice';
 
-const BlogCreate = ({
-  user,
-  refetchBlogs,
-  handleNotification,
-  createBlog: propCreateBlog,
-}) => {
+const BlogCreate = () => {
+  const dispatch = useDispatch();
+  const { token } = useSelector(selectUser);
+
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [url, setUrl] = useState('');
 
-  const handleCreateBlog = async event => {
+  const handleCreateBlog = async (event) => {
     event.preventDefault();
 
-    if (propCreateBlog) {
-      propCreateBlog({ title, author, url });
-      setTitle('');
-      setAuthor('');
-      setUrl('');
-      return;
-    }
-
-    try {
-      const response = await createBlog({
-        token: user.token,
-        title,
-        author,
-        url,
-      });
-      console.log(response);
-      await refetchBlogs();
-      handleNotification({
-        message: 'Blog created successfully',
-        type: 'success',
-      });
-      // Clear form after successful submission
-      setTitle('');
-      setAuthor('');
-      setUrl('');
-    } catch (error) {
-      console.log(error);
-      const errorMessage =
-        error.response?.data?.error || 'Failed to create blog';
-      handleNotification({ message: errorMessage, type: 'error' });
-    }
+    dispatch(
+      createBlog(
+        { title, author, url },
+        () => {
+          setTitle('');
+          setAuthor('');
+          setUrl('');
+        },
+        token
+      )
+    );
   };
 
   return (
     <BlogForm
-      formTitle='Create Blog'
+      formTitle="Create Blog"
       formProps={{ onSubmit: handleCreateBlog }}
-      buttonText='Create Blog'
+      buttonText="Create Blog"
       buttonProps={{ type: 'submit' }}
       title={title}
       author={author}

@@ -5,64 +5,33 @@ import Notification from './components/Notification';
 import BlogView from './views/blog/BlogView';
 import LogoutForm from './views/login/components/LogoutForm';
 import Text from './components/Text';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectUser } from './slices/userSlice';
+import { setUser } from './slices/userSlice';
+import { selectTitle } from './slices/uiSlice';
 
 const App = () => {
-  const [user, setUser] = useState(null);
-  const [title, setTitle] = useState();
-  const [notification, setNotification] = useState();
+  const dispatch = useDispatch();
+  const user = useSelector(selectUser);
+  const title = useSelector(selectTitle);
 
   useEffect(() => {
     const user = localStorageService.getUser();
-    console.log('local storage user', user);
     if (user) {
-      setUser(user);
+      dispatch(setUser(user));
     }
   }, []);
-
-  const populateLoggedInUser = user => {
-    setUser(user);
-    localStorageService.setUser(user);
-  };
-
-  const handleUserLogout = () => {
-    setUser(null);
-  };
-
-  const handleTitleChange = title => {
-    setTitle(title);
-  };
-
-  const handleNotification = notification => {
-    setNotification(notification);
-  };
 
   return (
     <div>
       <h3>{title}</h3>
-      <Notification message={notification?.message} type={notification?.type} />
+      <Notification />
 
-      {user && (
-        <Text
-          style={{ marginBottom: '10px' }}
-          text={user.username + ' logged in'}
-        />
-      )}
-      {user && <LogoutForm handleRemoveCurrentUser={handleUserLogout} />}
+      {user && <Text style={{ marginBottom: '10px' }} text={user.username + ' logged in'} />}
+      {user && <LogoutForm />}
 
-      {!user && (
-        <LoginView
-          populateLoggedInUser={populateLoggedInUser}
-          handleTitleChange={handleTitleChange}
-          handleNotification={handleNotification}
-        />
-      )}
-      {user && (
-        <BlogView
-          user={user}
-          handleTitleChange={handleTitleChange}
-          handleNotification={handleNotification}
-        />
-      )}
+      {!user && <LoginView />}
+      {user && <BlogView />}
     </div>
   );
 };

@@ -1,19 +1,17 @@
 import BlogDetail from './blogDetail/BlogDetail';
+import { useSelector } from 'react-redux';
+import { selectBlogsSortedByLikes } from '../../../slices/blogSlice';
 
-const Blogs = ({ blogs, handleNotification, refetchBlogs, user }) => {
+const Blogs = () => {
+  const blogs = useSelector(selectBlogsSortedByLikes);
+
   if (!blogs || blogs.length === 0) {
-    return <div></div>;
+    return <div>No blogs found</div>;
   }
   return (
     <div>
-      {blogs.map(blog => (
-        <BlogDetail
-          key={blog.id}
-          blog={blog}
-          handleNotification={handleNotification}
-          refetchBlogs={refetchBlogs}
-          user={user}
-        />
+      {blogs.map((blog) => (
+        <BlogDetail key={blog.id} blog={blog} />
       ))}
     </div>
   );
