@@ -1,4 +1,4 @@
-import { createContext, useReducer, useContext, useEffect } from 'react'
+import { createContext, useReducer, useContext, useEffect, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { getAll } from '../services/userService'
@@ -26,13 +26,20 @@ export const UserContextProvider = ({ children }) => {
     usersDispatch({ type: 'SET_USERS', payload: users })
   }
 
+  const getUser = useCallback(
+    (id) => {
+      return users.find((user) => user.id === id)
+    },
+    [users]
+  )
+
   const fetchUsers = useQuery({
     queryKey: ['users'],
     queryFn: async () => {
       const users = await getAll(user.token)
       return users
     },
-    enabled: !!user.token,
+    enabled: !!user?.token,
     retry: false,
   })
 
@@ -57,6 +64,7 @@ export const UserContextProvider = ({ children }) => {
         users,
         setUsers,
         fetchUsers: fetchUsers.refetch,
+        getUser,
       }}
     >
       {children}

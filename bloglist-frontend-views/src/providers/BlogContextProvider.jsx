@@ -38,7 +38,7 @@ export const BlogContextProvider = ({ children }) => {
       const blogs = await getAll(user.token)
       return blogs
     },
-    enabled: !!user.token,
+    enabled: !!user?.token,
     retry: false,
   })
 

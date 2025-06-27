@@ -5,9 +5,7 @@ import BlogView from './views/blog/BlogView'
 import LogoutForm from './views/login/components/LogoutForm'
 import Text from './components/Text'
 import { TitleContext } from './providers/TitleContextProvider'
-import { BlogContextProvider } from './providers/BlogContextProvider'
 import { AuthContext } from './providers/AuthContextProvider'
-import { UserContextProvider } from './providers/UserContextProvider'
 import UserView from './views/user/UserView'
 
 const App = () => {
@@ -23,18 +21,10 @@ const App = () => {
       {user && <LogoutForm />}
 
       {!user && <LoginView />}
-      {user && (
-        <BlogContextProvider>
-          <BlogView />
-        </BlogContextProvider>
-      )}
+      {user && <BlogView />}
 
       <h3>Users</h3>
-      {user && (
-        <UserContextProvider>
-          <UserView />
-        </UserContextProvider>
-      )}
+      {user && <UserView />}
     </div>
   )
 }

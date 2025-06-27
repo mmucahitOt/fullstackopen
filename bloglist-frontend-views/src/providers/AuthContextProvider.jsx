@@ -1,7 +1,7 @@
 import { createContext, useReducer, useContext, useEffect, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { login } from '../services/authService'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { NotificationContext } from './NotificationContextProvider'
 import localStorageService from '../services/localStorageService'
 
@@ -24,6 +24,7 @@ const authReducer = (state, action) => {
 }
 
 export const AuthContextProvider = ({ children }) => {
+  const queryClient = useQueryClient()
   const [user, userDispatch] = useReducer(authReducer, null)
   const { handleNotification } = useContext(NotificationContext)
 
@@ -43,6 +44,7 @@ export const AuthContextProvider = ({ children }) => {
     onSuccess: (data) => {
       setUser(data)
       localStorageService.setUser(data)
+      queryClient.invalidateQueries({ queryKey: ['blogs', 'users'] })
       handleNotification({ message: 'Login successful', type: 'success' })
     },
     onError: (error) => {
