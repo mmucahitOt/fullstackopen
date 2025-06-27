@@ -1,10 +1,13 @@
 import { useState, useContext } from 'react'
-import Text from '../../../../components/Text'
-import { BlogContext } from '../../../../providers/BlogContextProvider'
-import { AuthContext } from '../../../../providers/AuthContextProvider'
+import Text from '../../components/Text'
+import { BlogContext } from '../../providers/BlogContextProvider'
+import { AuthContext } from '../../providers/AuthContextProvider'
+import { useParams } from 'react-router-dom'
 
-const BlogDetail = ({ blog }) => {
-  const { likeBlog, deleteBlog } = useContext(BlogContext)
+const BlogDetail = () => {
+  const { likeBlog, deleteBlog, getBlog } = useContext(BlogContext)
+  const { id } = useParams()
+  const blog = getBlog(id)
   const [isExpanded, setIsExpanded] = useState(false)
 
   const { user } = useContext(AuthContext)

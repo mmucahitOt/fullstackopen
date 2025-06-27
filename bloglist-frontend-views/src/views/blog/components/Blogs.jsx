@@ -1,6 +1,6 @@
-import BlogDetail from './blogDetail/BlogDetail'
 import { useContext } from 'react'
 import { BlogContext } from '../../../providers/BlogContextProvider'
+import { Link } from 'react-router-dom'
 
 const Blogs = () => {
   const { blogs } = useContext(BlogContext)
@@ -11,7 +11,11 @@ const Blogs = () => {
   return (
     <div>
       {blogs.map((blog) => (
-        <BlogDetail key={blog.id} blog={blog} />
+        <Link to={`/blogs/${blog.id}`} key={blog.id}>
+          <div>
+            {blog.title} {blog.author}
+          </div>
+        </Link>
       ))}
     </div>
   )

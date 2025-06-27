@@ -5,8 +5,6 @@ const Notification = () => {
   const [visible, setVisible] = useState(true)
   const { notification } = useContext(NotificationContext)
 
-  console.log(notification)
-
   useEffect(() => {
     if (notification) {
       setVisible(true)

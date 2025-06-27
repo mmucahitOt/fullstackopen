@@ -1,4 +1,4 @@
-import { createContext, useReducer, useContext, useMemo, useEffect, useRef } from 'react'
+import { createContext, useReducer, useContext, useMemo, useEffect, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import {
@@ -31,6 +31,13 @@ export const BlogContextProvider = ({ children }) => {
   const setBlogs = (blogs) => {
     blogsDispatch({ type: 'SET_BLOGS', payload: blogs })
   }
+
+  const getBlog = useCallback(
+    (id) => {
+      return blogs.find((blog) => blog.id === id)
+    },
+    [blogs]
+  )
 
   const fetchBlogs = useQuery({
     queryKey: ['blogs'],
@@ -109,6 +116,7 @@ export const BlogContextProvider = ({ children }) => {
         blogs,
         blogsSortedByLikes,
         setBlogs,
+        getBlog,
         fetchBlogs: fetchBlogs.refetch,
         createBlog: createBlog.mutateAsync,
         likeBlog: likeBlog.mutateAsync,
