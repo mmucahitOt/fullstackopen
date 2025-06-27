@@ -1,41 +1,49 @@
 import { useContext } from 'react'
-import LoginView from './views/login/LoginView'
 import Notification from './components/Notification'
-import BlogView from './views/blog/BlogView'
-import LogoutForm from './views/login/components/LogoutForm'
-import Text from './components/Text'
+import BlogsView from './views/blogs/BlogsView'
 import { TitleContext } from './providers/TitleContextProvider'
 import { AuthContext } from './providers/AuthContextProvider'
-import UserView from './views/user/UserView'
+import UsersView from './views/users/UsersView'
 import { Routes, Route } from 'react-router-dom'
 import UserDetail from './views/userDetail/UserDetail'
 import BlogDetail from './views/blogDetail/BlogDetail'
+import { Link } from 'react-router-dom'
+import Text from './components/Text'
+import LogoutForm from './views/auth/components/LogoutForm'
+import LoginView from './views/auth/LoginView'
 
-const AppPanel = () => {
+const Dashboard = () => {
   const { user } = useContext(AuthContext)
   return (
-    <div>
-      {user && <BlogView />}
-
-      <h3>Users</h3>
-      {user && <UserView />}
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'row',
+        gap: '10px',
+        backgroundColor: 'lightgrey',
+      }}
+    >
+      <Link to="/blogs">blogs</Link>
+      <Link to="/users">users</Link>
+      <Text style={{ marginBottom: '10px' }} text={user.username + ' logged in'} />
+      <LogoutForm />
     </div>
   )
 }
-
 const App = () => {
-  const { user } = useContext(AuthContext)
   const { title } = useContext(TitleContext)
+  const { user } = useContext(AuthContext)
 
   return (
     <div>
-      <h3>{title}</h3>
       <Notification />
-      {user && <Text style={{ marginBottom: '10px' }} text={user.username + ' logged in'} />}
-      {user && <LogoutForm />}
-      {!user && <LoginView />}
+      {user && <Dashboard />}
+      <Text as="h3" style={{ marginBottom: '10px' }} text={'blog app'} />
+      <h3>{title}</h3>
       <Routes>
-        <Route path="/" element={<AppPanel />} />
+        <Route path="/" element={<LoginView />} />
+        <Route path="/blogs" element={<BlogsView />} />
+        <Route path="users" element={<UsersView />} />
         <Route path="users/:id" element={<UserDetail />} />
         <Route path="blogs/:id" element={<BlogDetail />} />
       </Routes>

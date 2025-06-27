@@ -94,8 +94,8 @@ export const BlogContextProvider = ({ children }) => {
 
   const deleteBlog = useMutation({
     mutationFn: async (blog) => {
-      const deletedBlog = await deleteBlogService({ token: user.token, id: blog.id })
-      return deletedBlog
+      await deleteBlogService({ token: user.token, id: blog.id })
+      return blog
     },
     onSuccess: (blog) => {
       handleNotification({ message: 'Blog named ' + blog.title + ' deleted', type: 'success' })

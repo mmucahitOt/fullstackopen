@@ -2,15 +2,16 @@ import { useState, useContext } from 'react'
 import Text from '../../components/Text'
 import { BlogContext } from '../../providers/BlogContextProvider'
 import { AuthContext } from '../../providers/AuthContextProvider'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 
 const BlogDetail = () => {
+  const navigate = useNavigate()
   const { likeBlog, deleteBlog, getBlog } = useContext(BlogContext)
   const { id } = useParams()
   const blog = getBlog(id)
 
   const { user } = useContext(AuthContext)
-  // If blog is null, don't render anything
+
   if (!blog) {
     return null
   }
@@ -22,6 +23,7 @@ const BlogDetail = () => {
   const handleRemove = () => {
     if (window.confirm('Are you sure you want to delete this blog?')) {
       deleteBlog(blog)
+      navigate('/blogs')
     }
   }
 
@@ -32,7 +34,7 @@ const BlogDetail = () => {
       style={{ paddingTop: 10, paddingLeft: 2, border: 'solid', borderWidth: 1, marginBottom: 5 }}
     >
       <div style={{ display: 'flex' }}>
-        <Text as="p" style={{ margin: '0' }} text={`${blog.title} ${blog.author}`} />
+        <Text as="h3" style={{ margin: '0' }} text={`${blog.title} ${blog.author}`} />
       </div>
 
       <div>

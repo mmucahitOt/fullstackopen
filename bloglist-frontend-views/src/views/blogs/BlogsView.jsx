@@ -4,7 +4,7 @@ import Blogs from './components/Blogs'
 import Togglable from '../../components/Togglable'
 import { TitleContext } from '../../providers/TitleContextProvider'
 
-const BlogView = () => {
+const BlogsView = () => {
   const { handleTitle } = useContext(TitleContext)
   const blogCreateRef = useRef()
   const blogListRef = useRef()
@@ -35,4 +35,4 @@ const BlogView = () => {
   )
 }
 
-export default BlogView
+export default BlogsView
