@@ -30,6 +30,7 @@ blogRouter.post("/", async (request, response, next) => {
       author,
       url,
       likes,
+      comments: [],
       user: new mongoose.Types.ObjectId(userId),
     });
     const result = await blog.save();

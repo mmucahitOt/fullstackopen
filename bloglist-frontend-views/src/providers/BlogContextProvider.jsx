@@ -51,6 +51,7 @@ export const BlogContextProvider = ({ children }) => {
 
   useEffect(() => {
     if (fetchBlogs.data && fetchBlogs.status === 'success') {
+      console.log('fetchBlogs.data', fetchBlogs.data)
       setBlogs(fetchBlogs.data)
     }
   }, [fetchBlogs.data, fetchBlogs.status, handleNotification])

@@ -3,13 +3,14 @@ import Text from '../../components/Text'
 import { BlogContext } from '../../providers/BlogContextProvider'
 import { AuthContext } from '../../providers/AuthContextProvider'
 import { useParams, useNavigate } from 'react-router-dom'
+import BlogComment from './components/BlogComment'
 
 const BlogDetail = () => {
   const navigate = useNavigate()
   const { likeBlog, deleteBlog, getBlog } = useContext(BlogContext)
   const { id } = useParams()
   const blog = getBlog(id)
-
+  console.log(blog)
   const { user } = useContext(AuthContext)
 
   if (!blog) {
@@ -31,7 +32,11 @@ const BlogDetail = () => {
 
   return (
     <div
-      style={{ paddingTop: 10, paddingLeft: 2, border: 'solid', borderWidth: 1, marginBottom: 5 }}
+      style={{
+        paddingTop: 10,
+        paddingLeft: 2,
+        marginBottom: 5,
+      }}
     >
       <div style={{ display: 'flex' }}>
         <Text as="h3" style={{ margin: '0' }} text={`${blog.title} ${blog.author}`} />
@@ -48,6 +53,7 @@ const BlogDetail = () => {
         <Text as="p" style={{ margin: '0' }} text={blog.user.name} />
         {deleteButtonVisible && <button onClick={() => handleRemove()}>delete</button>}
       </div>
+      <BlogComment comments={blog.comments ? blog.comments : []} />
     </div>
   )
 }
