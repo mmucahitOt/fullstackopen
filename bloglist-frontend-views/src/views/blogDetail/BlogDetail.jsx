@@ -53,7 +53,7 @@ const BlogDetail = () => {
         <Text as="p" style={{ margin: '0' }} text={blog.user.name} />
         {deleteButtonVisible && <button onClick={() => handleRemove()}>delete</button>}
       </div>
-      <BlogComment comments={blog.comments ? blog.comments : []} />
+      <BlogComment blog={blog} />
     </div>
   )
 }

@@ -52,3 +52,18 @@ export const likeBlog = async ({ token, id }) => {
   })
   return response.data
 }
+
+export const createComment = async ({ token, id, comment }) => {
+  console.log('createComment service', id, comment)
+  const response = await axios.put(
+    BLOG_API_URL + '/' + id + '/comments',
+    { comment },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    }
+  )
+  return response.data
+}

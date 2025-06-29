@@ -6,6 +6,7 @@ import {
   createBlog as createBlogService,
   likeBlog as likeBlogService,
   deleteBlog as deleteBlogService,
+  createComment as createCommentService,
 } from '../services/blogService'
 import { NotificationContext } from './NotificationContextProvider'
 import { AuthContext } from './AuthContextProvider'
@@ -107,6 +108,30 @@ export const BlogContextProvider = ({ children }) => {
     },
   })
 
+  const createComment = useMutation({
+    mutationFn: async ({ id, comment }) => {
+      console.log('createComment useMutation', id, comment)
+      const blog = await createCommentService({
+        token: user.token,
+        id: id,
+        comment: comment,
+      })
+      return blog
+    },
+    retry: false,
+    enabled: !!user?.token,
+    onSuccess: (blog) => {
+      handleNotification({
+        message: 'Comment added to blog named ' + blog.title,
+        type: 'success',
+      })
+      queryClient.invalidateQueries({ queryKey: ['blogs'] })
+    },
+    onError: (error) => {
+      handleNotification({ message: error.response.data.error, type: 'error' })
+    },
+  })
+
   const blogsSortedByLikes = useMemo(() => {
     return blogs.sort((a, b) => b.likes - a.likes)
   }, [blogs])
@@ -122,6 +147,7 @@ export const BlogContextProvider = ({ children }) => {
         createBlog: createBlog.mutateAsync,
         likeBlog: likeBlog.mutateAsync,
         deleteBlog: deleteBlog.mutateAsync,
+        createComment: createComment.mutateAsync,
       }}
     >
       {children}

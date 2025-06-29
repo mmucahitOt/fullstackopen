@@ -1,11 +1,8 @@
 import Text from '../../../components/Text'
+import CommentCreateForm from './CommentCreateForm'
 
-const BlogComment = ({ comments }) => {
-  console.log('Comments data:', comments)
-  console.log('Comments type:', typeof comments)
-  console.log('Comments length:', comments?.length)
-
-  if (!comments || comments.length === 0) {
+const BlogComment = ({ blog }) => {
+  if (!blog.comments || blog.comments.length === 0) {
     return (
       <div>
         <Text as="h3" style={{ margin: '0' }} text="Comments" />
@@ -17,8 +14,9 @@ const BlogComment = ({ comments }) => {
   return (
     <div>
       <Text as="h3" style={{ margin: '0' }} text="Comments" />
+      <CommentCreateForm blog={blog} />
       <ul>
-        {comments.map((comment) => (
+        {blog.comments.map((comment) => (
           <li key={comment._id}>{comment.comment}</li>
         ))}
       </ul>
