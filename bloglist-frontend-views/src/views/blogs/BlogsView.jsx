@@ -19,7 +19,7 @@ const BlogsView = () => {
   }, [])
 
   return (
-    <div>
+    <div className="container">
       <Togglable
         ref={blogCreateRef}
         otherRefOfTogglable={blogListRef}

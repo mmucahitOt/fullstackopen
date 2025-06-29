@@ -11,7 +11,11 @@ const LogOutForm = () => {
     removeUser()
     navigate('/')
   }
-  return <button onClick={handleLogout}>logout</button>
+  return (
+    <button onClick={handleLogout} className="btn btn-primary">
+      logout
+    </button>
+  )
 }
 
 export default LogOutForm

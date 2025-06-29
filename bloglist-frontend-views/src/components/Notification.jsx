@@ -20,6 +20,7 @@ const Notification = () => {
 
   return (
     <div
+      className="alert alert-dismissible alert-primary"
       style={{
         color: notification.type === 'error' ? 'red' : 'green',
         background: 'lightgrey',

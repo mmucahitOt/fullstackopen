@@ -9,7 +9,7 @@ import UserDetail from './views/userDetail/UserDetail'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { UserContextProvider } from './providers/UserContextProvider'
 import { BlogContextProvider } from './providers/BlogContextProvider'
-import BlogDetail from './views/blogDetail/_BlogDetail'
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 const queryClient = new QueryClient()
 
@@ -21,7 +21,10 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <AuthContextProvider>
             <UserContextProvider>
               <BlogContextProvider>
-                <App />
+                <Routes>
+                  <Route path="/" element={<App />} />
+                  <Route path="users/:id" element={<UserDetail />} />
+                </Routes>
               </BlogContextProvider>
             </UserContextProvider>
           </AuthContextProvider>

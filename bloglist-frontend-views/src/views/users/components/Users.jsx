@@ -9,20 +9,20 @@ const Users = () => {
     return <div>No users found</div>
   }
   return (
-    <table>
-      <thead>
+    <table className="table table-striped">
+      <thead className="table-light">
         <tr>
-          <th></th>
-          <th>blogs created</th>
+          <th className="text-primary">name</th>
+          <th className="text-primary">blogs created</th>
         </tr>
       </thead>
       <tbody>
         {users.map((user) => (
-          <tr key={user.id}>
-            <td>
+          <tr key={user.id} className="table-light">
+            <td className="text-primary">
               <Link to={`/users/${user.id}`}>{user.name}</Link>
             </td>
-            <td>{user.blogs.length}</td>
+            <td className="text-primary">{user.blogs.length}</td>
           </tr>
         ))}
       </tbody>

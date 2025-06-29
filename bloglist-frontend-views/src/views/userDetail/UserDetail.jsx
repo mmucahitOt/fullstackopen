@@ -12,13 +12,15 @@ const UserDetail = () => {
   }
 
   return (
-    <div>
-      <h2>{user.name}</h2>
-      <div>
+    <div className="container">
+      <h2 className="text-primary">{user.name}</h2>
+      <div className="list-group">
         added blogs
-        <ul>
+        <ul className="list-group-item">
           {user.blogs.map((blog) => (
-            <li key={blog.id}>{blog.title}</li>
+            <li key={blog.id} className="list-group-item">
+              {blog.title}
+            </li>
           ))}
         </ul>
       </div>

@@ -1,6 +1,7 @@
 import { useContext, useState } from 'react'
 import Form from '../../../components/common/form/Form'
 import { BlogContext } from '../../../providers/BlogContextProvider'
+import FormInput from '../../../components/common/form/FormInput'
 
 const CommentCreateForm = ({ blog }) => {
   const [comment, setComment] = useState('')
@@ -18,11 +19,14 @@ const CommentCreateForm = ({ blog }) => {
       }}
       buttonText="Add Comment"
     >
-      <input
-        placeholder="Add a comment"
-        type="text"
-        value={comment}
-        onChange={(e) => setComment(e.target.value)}
+      <FormInput
+        inputProps={{
+          label: 'Comment',
+          type: 'text',
+          name: 'comment',
+          value: comment,
+          onChange: ({ target }) => setComment(target.value),
+        }}
       />
     </Form>
   )

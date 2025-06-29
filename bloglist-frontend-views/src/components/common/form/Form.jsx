@@ -4,11 +4,11 @@ const Form = ({ children, formTitle, formProps, buttonText, buttonProps }) => {
     formProps.onSubmit(e)
   }
   return (
-    <div>
-      <form {...formProps}>
-        <h3>{formTitle}</h3>
+    <div className="container">
+      <form {...formProps} className="form-group">
+        <h3 className="form-label">{formTitle}</h3>
         {children}
-        <div>
+        <div className="d-flex justify-content-end">
           <button type="submit" {...buttonProps} onClick={handleSubmit}>
             {buttonText}
           </button>

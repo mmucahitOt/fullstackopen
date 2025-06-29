@@ -9,10 +9,10 @@ const Blogs = () => {
     return <div>No blogs found</div>
   }
   return (
-    <div>
+    <div className="list-group">
       {blogs.map((blog) => (
         <Link to={`/blogs/${blog.id}`} key={blog.id}>
-          <div>
+          <div className="list-group-item">
             {blog.title} {blog.author}
           </div>
         </Link>

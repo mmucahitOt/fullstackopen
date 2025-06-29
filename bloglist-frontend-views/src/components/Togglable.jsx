@@ -42,10 +42,10 @@ const Togglable = forwardRef(
     }
 
     return (
-      <div style={styles}>
+      <div style={styles} className="d-flex justify-content-end">
         {isVisible && children}
         {hasButton && (
-          <button style={buttonStyle} onClick={handleButtonClick}>
+          <button style={buttonStyle} onClick={handleButtonClick} className="btn btn-primary">
             {isVisible ? labelWhenVisible : labelWhenHidden}
           </button>
         )}

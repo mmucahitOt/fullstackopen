@@ -37,16 +37,17 @@ const BlogDetail = () => {
         paddingLeft: 2,
         marginBottom: 5,
       }}
+      className="container"
     >
-      <div style={{ display: 'flex' }}>
+      <div style={{ display: 'flex' }} className="d-flex justify-content-between">
         <Text as="h3" style={{ margin: '0' }} text={`${blog.title} ${blog.author}`} />
       </div>
 
-      <div>
+      <div className="d-flex justify-content-between">
         <a href={blog.url} target="_blank" rel="noopener noreferrer">
           {blog.url}
         </a>
-        <div style={{ display: 'flex' }}>
+        <div style={{ display: 'flex' }} className="d-flex justify-content-between">
           <Text as="p" style={{ margin: '0' }} text={blog.likes} />
           <button onClick={() => handleLike()}>like</button>
         </div>

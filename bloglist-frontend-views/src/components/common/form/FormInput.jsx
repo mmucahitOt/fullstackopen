@@ -5,9 +5,11 @@ const FormInput = ({ inputDivProps, inputProps }) => {
   const inputId = `input-${restInputProps.name}`
 
   return (
-    <div {...inputDivProps}>
-      <label htmlFor={inputId}>{label}</label>
-      <input id={inputId} {...restInputProps} />
+    <div {...inputDivProps} className="form-group">
+      <label htmlFor={inputId} className="form-label">
+        {label}
+      </label>
+      <input id={inputId} {...restInputProps} className="form-control" />
     </div>
   )
 }

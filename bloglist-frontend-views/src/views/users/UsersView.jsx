@@ -10,7 +10,7 @@ const UserView = () => {
   }, [])
 
   return (
-    <div>
+    <div className="container">
       <Users />
     </div>
   )

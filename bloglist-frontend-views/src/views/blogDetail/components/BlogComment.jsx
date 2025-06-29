@@ -15,9 +15,11 @@ const BlogComment = ({ blog }) => {
     <div>
       <Text as="h3" style={{ margin: '0' }} text="Comments" />
       <CommentCreateForm blog={blog} />
-      <ul>
+      <ul className="list-group">
         {blog.comments.map((comment) => (
-          <li key={comment._id}>{comment.comment}</li>
+          <li key={comment._id} className="list-group-item">
+            {comment.comment}
+          </li>
         ))}
       </ul>
     </div>
