@@ -101,8 +101,9 @@ const typeDefs = `
     genres: [String!]!
   }
 
-  type AuthorStats {
+  type AllAuthorsResultItem {
     author: String!
+    born: Int
     bookCount: Int!
   }
 
@@ -120,7 +121,7 @@ const typeDefs = `
     bookCount: Int!
     authorCount: Int!
     allBooks(author: String, genre: String): [AllBooksResultItem!]
-    allAuthors: [AuthorStats!]
+    allAuthors: [AllAuthorsResultItem!]
   }
 
   type Mutation {
@@ -167,6 +168,7 @@ const resolvers = {
       const result = authors.map((author) => {
         return {
           author: author.name,
+          born: author.born,
           bookCount: books.filter((book) => book.author === author.name).length,
         };
       });
