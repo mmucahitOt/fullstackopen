@@ -1,22 +1,24 @@
 import { useState } from 'react'
-import { useAddBook } from '../graphql'
+import { useAddBook, useAllAuthors } from '../graphql'
 
 
 const NewBook = () => {
   const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
+  const [authorId, setAuthorId] = useState(undefined)
   const [published, setPublished] = useState('')
   const [genre, setGenre] = useState('')
   const [genres, setGenres] = useState([])
   const { addBook, loading, error } = useAddBook()
+  const { data: authorsData, loading: authorsLoading, error: authorsError } = useAllAuthors()
+  
   const submit = async (event) => {
     event.preventDefault()
 
-    addBook({variables: {title, author, published: Number(published), genres}, })
+    addBook({variables: {title, authorId, published: Number(published), genres}, })
 
     setTitle('')
     setPublished('')
-    setAuthor('')
+    setAuthorId('')
     setGenres([])
     setGenre('')
   }
@@ -38,10 +40,13 @@ const NewBook = () => {
         </div>
         <div>
           author
-          <input
-            value={author}
-            onChange={({ target }) => setAuthor(target.value)}
-          />
+          <select value={authorId} onChange={({ target }) => setAuthorId(target.value)}>
+            {authorsData.allAuthors.map((author) => (
+              <option key={author._id} value={author._id}>
+                {author.name}
+              </option>
+            ))}
+          </select>
         </div>
         <div>
           published

@@ -1,11 +1,19 @@
 import { useAllAuthors, useEditAuthor } from "../graphql"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 const Authors = () => {
   const { data, loading, error } = useAllAuthors()
   const [name, setName] = useState('')
   const [born, setBorn] = useState('')
-  const { editAuthor, loading: editAuthorLoading, error: editAuthorError } = useEditAuthor()
+  const { editAuthor, loading: editAuthorLoading, error: editAuthorError, } = useEditAuthor()
+  
+  useEffect(() => {
+    if (data) {
+      setName(data.allAuthors[0].name)
+    }
+  }, [data])
+  
+  
   if (error) {
     console.log(error)
   }
@@ -35,8 +43,8 @@ const Authors = () => {
             <th>books</th>
           </tr>
           {data.allAuthors.map((a) => (
-            <tr key={a.author}>
-              <td>{a.author}</td>
+            <tr key={a._id}>
+              <td>{a.name}</td>
               <td>{a.born ? a.born : "N/A"}</td>
               <td>{a.bookCount}</td>
             </tr>
@@ -49,7 +57,7 @@ const Authors = () => {
           name
           <select value={name} onChange={({ target }) => setName(target.value)}>
             {data.allAuthors.map((a) => (
-              <option key={a.author} value={a.author}>{a.author}</option>
+              <option key={a._id} value={a.name}>{a.name}</option>
             ))}
           </select>
         </div>

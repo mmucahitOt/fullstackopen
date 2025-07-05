@@ -3,12 +3,12 @@ import { allBooks } from "../../resolverTypes";
 import { useState } from "react";
 
 const useAllBooks = () => {
-  const [author, setAuthor] = useState(null);
+  const [authorName, setAuthorName] = useState(null);
   const [genre, setGenre] = useState(null);
 
   const { data, loading, error } = useQuery(allBooks.query, {
     variables: {
-      author: author,
+      authorName: authorName,
       genre: genre,
     },
   });
@@ -17,7 +17,7 @@ const useAllBooks = () => {
   console.log("loading", loading);
   console.log("error", error);
 
-  return { data, loading, error, author, setAuthor, genre, setGenre };
+  return { data, loading, error, authorName, setAuthorName, genre, setGenre };
 };
 
 export default useAllBooks;
