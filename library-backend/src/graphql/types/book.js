@@ -21,6 +21,7 @@ const book = `
   }
 
   type Query {
+    genres: [String!]!
     bookCount: Int!
     allBooks(authorName: String, genre: String): [AllBooksResultItem!]
   }

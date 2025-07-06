@@ -1,11 +1,17 @@
 import { useAllAuthors, useEditAuthor } from "../graphql"
 import { useEffect, useState } from "react"
+import { useCurrentUser } from "../provider/current-user.hook"
 
 const Authors = () => {
-  const { data, loading, error } = useAllAuthors()
   const [name, setName] = useState('')
   const [born, setBorn] = useState('')
-  const { editAuthor, loading: editAuthorLoading, error: editAuthorError, } = useEditAuthor()
+
+  const { currentUser } = useCurrentUser()
+  
+  const { data, loading, error } = useAllAuthors()
+  const { editAuthor } = useEditAuthor()
+  
+  console.log("authors", data)
   
   useEffect(() => {
     if (data) {
@@ -13,6 +19,7 @@ const Authors = () => {
     }
   }, [data])
   
+  console.log("name", name)
   
   if (error) {
     console.log(error)
@@ -51,7 +58,9 @@ const Authors = () => {
           ))}
         </tbody>
       </table>
-      <h2>Set birthyear</h2>
+      {
+        currentUser && <>
+        <h2>Set birthyear</h2>
       <form onSubmit={submit}>
         <div>
           name
@@ -71,6 +80,8 @@ const Authors = () => {
 
         <button type="submit">update author</button>
       </form>
+        </>
+      }
     </div>
   )
 }

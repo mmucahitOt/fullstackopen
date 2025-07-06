@@ -30,6 +30,30 @@ const bookQueryRepository = {
   getBookCount: async () => {
     return await Book.collection.countDocuments();
   },
+
+  getGenres: async () => {
+    const pipeline = [
+      {
+        $unwind: "$genres",
+      },
+      {
+        $group: {
+          _id: "$genres",
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          genres: { $addToSet: "$_id" },
+        },
+      },
+    ];
+    const result = await Book.aggregate(pipeline);
+
+    console.log("result", result);
+
+    return result[0].genres;
+  },
 };
 
 module.exports = bookQueryRepository;

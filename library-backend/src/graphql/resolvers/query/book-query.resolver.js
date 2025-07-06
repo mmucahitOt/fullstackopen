@@ -5,7 +5,7 @@ const {
 
 const bookQueries = {
   allBooks: async (root, args, context) => {
-    validateIfUserIsAuthenticated(context);
+    //validateIfUserIsAuthenticated(context);
     const filter = {};
     if (args.authorName) {
       filter["author.name"] = args.authorName;
@@ -17,8 +17,12 @@ const bookQueries = {
     return books;
   },
   bookCount: async (root, args, context) => {
-    validateIfUserIsAuthenticated(context);
+    //validateIfUserIsAuthenticated(context);
     return await bookQueryRepository.getBookCount();
+  },
+  genres: async (root, args, context) => {
+    validateIfUserIsAuthenticated(context);
+    return await bookQueryRepository.getGenres();
   },
 };
 
