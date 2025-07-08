@@ -14,8 +14,8 @@ const addBook = {
         published: $published
         genres: $genres
       ) {
+        _id
         title
-        author
       }
     }
   `,

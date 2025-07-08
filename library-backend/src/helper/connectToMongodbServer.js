@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
-const { mongoUri } = require("../services/configs.service");
+const { MONGO_URI } = require("../services/configs.service");
 
 const connectToMongodbServer = async () => {
-  await mongoose.connect(mongoUri);
+  await mongoose.connect(MONGO_URI);
   console.log("Connected to MongoDB");
 };
 

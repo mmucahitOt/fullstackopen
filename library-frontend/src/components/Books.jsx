@@ -1,11 +1,10 @@
 import { useAllBooks, useGenres } from "../graphql"
 import { useCurrentUser } from "../provider/current-user.hook"
-import { useState } from "react"
 
 const Books = () => {
   const {currentUser} = useCurrentUser()
   const { data: booksData, loading, error, genre, setGenre } = useAllBooks()
-  const { data: genresData,} = useGenres()
+  const { data: genresData, } = useGenres()
 
   if (error) {
     console.log(error)
@@ -33,7 +32,7 @@ const Books = () => {
           {booksData.allBooks.map((a) => (
             <tr key={a.title}>
               <td>{a.title}</td>
-              <td>{a.author.name}</td>
+              <td>{a.author.name ?? "unknown"}</td>
               <td>{a.published}</td>
             </tr>
           ))}

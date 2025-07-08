@@ -1,18 +1,21 @@
 import Authors from "./components/Authors";
 import Books from "./components/Books";
 import NewBook from "./components/NewBook";
-import { Routes, Route, Link, useNavigate } from "react-router-dom";
+import { Routes, Route, Link } from "react-router-dom";
 import Login from "./components/Login";
 import Logout from "./components/Logout";
 import { useCurrentUser } from "./provider/current-user.hook";
 import { ApolloProvider } from "@apollo/client";
 import { apolloClient } from "./graphql/apolloClient";
+import Notification from "./components/Notification";
+import SubscriptionHandler from "./components/SubscriptionHandler";
 
 const App = () => {
   const { currentUser } = useCurrentUser();
-
   return (
     <ApolloProvider client={apolloClient}>   
+      <Notification />
+      <SubscriptionHandler />
       <div>
         <h1>Library App</h1>
       </div>

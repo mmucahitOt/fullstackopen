@@ -19,8 +19,6 @@ const Authors = () => {
     }
   }, [data])
   
-  console.log("name", name)
-  
   if (error) {
     console.log(error)
   }

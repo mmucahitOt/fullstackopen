@@ -1,9 +1,9 @@
 const bcrypt = require("bcrypt");
-const { saltRounds } = require("./configs.service");
+const { SALT_ROUNDS } = require("./configs.service");
 
 const hashService = {
   hashPassword: async (password) => {
-    return await bcrypt.hash(password, Number(saltRounds));
+    return await bcrypt.hash(password, Number(SALT_ROUNDS));
   },
   comparePassword: async ({ password, hashedPassword }) => {
     console.log("password", password);

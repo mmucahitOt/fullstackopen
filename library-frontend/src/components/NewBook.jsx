@@ -1,18 +1,22 @@
 import { useState } from 'react'
 import { useAddBook, useAllAuthors } from '../graphql'
 
-
 const NewBook = () => {
   const [title, setTitle] = useState('')
   const [authorId, setAuthorId] = useState(undefined)
   const [published, setPublished] = useState('')
   const [genre, setGenre] = useState('')
   const [genres, setGenres] = useState([])
-  const { addBook, loading, error } = useAddBook()
-  const { data: authorsData, loading: authorsLoading, error: authorsError } = useAllAuthors()
+  const { addBook } = useAddBook()
+  const { data: authorsData, loading: authorsLoading } = useAllAuthors()
   
   const submit = async (event) => {
     event.preventDefault()
+
+    console.log("title", title)
+    console.log("authorId", authorId)
+    console.log("published", published)
+    console.log("genres", genres)
 
     addBook({variables: {title, authorId, published: Number(published), genres}, })
 
@@ -26,6 +30,10 @@ const NewBook = () => {
   const addGenre = () => {
     setGenres(genres.concat(genre))
     setGenre('')
+  }
+
+  if (!authorsData || authorsLoading) {
+    return <div>Loading...</div>
   }
 
   return (

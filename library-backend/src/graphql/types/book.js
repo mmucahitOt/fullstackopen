@@ -16,8 +16,15 @@ const book = `
   }
 
   type AddBookResult {
+    _id: ID!
     title: String!
-    author: String!
+    published: Int!
+    author: Author!
+    genres: [String!]!
+  }
+
+  type Subscription {
+    bookAdded: AddBookResult!
   }
 
   type Query {
