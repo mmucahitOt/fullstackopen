@@ -1,4 +1,4 @@
-interface ExerciseResult {
+export interface ExerciseResult {
   periodLength: number;
   trainingDays: number;
   originalTargetValue: number;
@@ -8,12 +8,12 @@ interface ExerciseResult {
   average: number;
 }
 
-interface CalculateExercisesParams {
+export interface CalculateExercisesParams {
   hoursPerDay: number[];
   target: number;
 }
 
-function _calculateExercises(params: CalculateExercisesParams): ExerciseResult {
+export function calculateExercises(params: CalculateExercisesParams): ExerciseResult {
   const { hoursPerDay, target } = params;
   const periodLength = hoursPerDay.length;
   const trainingDays = hoursPerDay.filter((hour) => hour > 0).length;
@@ -40,26 +40,3 @@ function _calculateExercises(params: CalculateExercisesParams): ExerciseResult {
     average: calculatedAverageTime,
   };
 }
-
-function calculateExercises(): ExerciseResult {
-  const args = process.argv.slice(2);
-
-  if (args.length < 2) {
-    throw new Error("Provided array must contain target and hours per day");
-  }
-
-  if (args.some((arg) => isNaN(Number(arg)))) {
-    throw new Error("Provided array must contain only numbers");
-  }
-
-  if (args.some((arg) => Number(arg) < 0)) {
-    throw new Error("Provided array must contain only positive numbers");
-  }
-
-  const hoursPerDay = args.slice(1).map((arg) => Number(arg));
-  const target = Number(args[0]);
-
-  return _calculateExercises({ hoursPerDay, target });
-}
-
-console.log(calculateExercises());
