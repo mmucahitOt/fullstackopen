@@ -9,16 +9,16 @@ export interface ExerciseResult {
 }
 
 export interface CalculateExercisesParams {
-  hoursPerDay: number[];
+  dailyExerciseDuration: number[];
   target: number;
 }
 
 export function calculateExercises(params: CalculateExercisesParams): ExerciseResult {
-  const { hoursPerDay, target } = params;
-  const periodLength = hoursPerDay.length;
-  const trainingDays = hoursPerDay.filter((hour) => hour > 0).length;
+  const { dailyExerciseDuration, target } = params;
+  const periodLength = dailyExerciseDuration.length;
+  const trainingDays = dailyExerciseDuration.filter((hours) => hours > 0).length;
   const calculatedAverageTime =
-    hoursPerDay.reduce((sum, hour) => sum + hour, 0) / periodLength;
+    dailyExerciseDuration.reduce((sum, hours) => sum + hours, 0) / periodLength;
   const targetReached = calculatedAverageTime >= target;
   const rating = targetReached
     ? 3

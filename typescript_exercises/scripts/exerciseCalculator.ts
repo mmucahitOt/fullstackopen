@@ -18,10 +18,10 @@ function calculateExercises(): ExerciseResult {
     throw new Error("Provided array must contain only positive numbers");
   }
 
-  const hoursPerDay = args.slice(1).map((arg) => Number(arg));
+  const dailyExerciseDuration = args.slice(1).map((arg) => Number(arg));
   const target = Number(args[0]);
 
-  return _calculateExercises({ hoursPerDay, target });
+  return _calculateExercises({ dailyExerciseDuration, target });
 }
 
 console.log(calculateExercises());
