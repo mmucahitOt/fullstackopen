@@ -1,0 +1,11 @@
+### Get all diagnoses
+GET http://localhost:3001/api/diagnoses
+
+### Create a diagnosis
+POST http://localhost:3001/api/diagnoses
+Content-Type: application/json
+
+{
+  "code": "M24.2",
+  "name": "Disorder of ligament"
+}
