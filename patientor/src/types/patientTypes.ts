@@ -14,3 +14,5 @@ export interface PatientCreateInput {
   gender: string;
   occupation: string;
 }
+
+export type PatientListItemResult = Omit<Patient, "ssn">;

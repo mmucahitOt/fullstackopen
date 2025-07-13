@@ -4,7 +4,7 @@ import { Diagnosis, DiagnosisCreateInput } from "../types/diagnoseTypes";
 
 const router = Router();
 
-router.get("/", (_req, res) => {
+router.get("/", (_req: Request, res: Response<Diagnosis[]>) => {
   res.send(getDiagnoses());
 });
 
