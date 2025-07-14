@@ -1,0 +1,1 @@
+export { default as transformCreatePatient } from "./validateCreatePatient";
