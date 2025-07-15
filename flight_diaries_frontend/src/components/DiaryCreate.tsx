@@ -1,7 +1,13 @@
 import { useState } from "react";
+import diaryService from "../services/diaryService";
+import { Weather } from "../types";
+import { Visibility } from "../types";
 
+export interface DiaryCreateProps {
+  fetchDiaries: () => void;
+}
 
-const DiaryCreate = () => {
+const DiaryCreate = ({ fetchDiaries }: DiaryCreateProps) => {
   const [date, setDate] = useState<string>("");
   const [weather, setWeather] = useState<string>("");
   const [visibility, setVisibility] = useState<string>("");
@@ -9,7 +15,8 @@ const DiaryCreate = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(date, weather, visibility, comment);
+    diaryService.createDiary({ date, weather: weather as Weather, visibility: visibility as Visibility, comment });
+    fetchDiaries();
   };
 
   return <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>

@@ -1,12 +1,12 @@
 import express, { Request, Response } from "express";
 import diaryService from "../services/diaryService";
-import { DiaryEntry, NewDiaryEntry, NonSensitiveDiaryEntry } from "../types";
+import { DiaryEntry, NewDiaryEntry } from "../types";
 import { newDiaryValidationMiddleware } from "../utils";
 
 const router = express.Router();
 
-router.get("/", (_req: Request, res: Response<NonSensitiveDiaryEntry[]>) => {
-  res.send(diaryService.getNonSensitiveEntries());
+router.get("/", (_req: Request, res: Response<DiaryEntry[]>) => {
+  res.send(diaryService.getEntries());
 });
 
 router.get(
