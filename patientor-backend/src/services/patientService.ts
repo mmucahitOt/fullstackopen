@@ -1,12 +1,12 @@
 import {
   Patient,
   PatientCreateInput,
-  PatientListItemResult,
+  NonSensitivePatient,
 } from "../types/patientTypes";
 import { patients } from "../data";
 import { v4 as uuidv4 } from "uuid";
 
-export const getPatients = (): PatientListItemResult[] => {
+export const getPatients = (): NonSensitivePatient[] => {
   return patients.map(({ id, dateOfBirth, gender, name, occupation }) => {
     return {
       id,
@@ -18,10 +18,15 @@ export const getPatients = (): PatientListItemResult[] => {
   });
 };
 
+export const getPatientById = (id: string): Patient | undefined => {
+  return patients.find((patient) => patient.id === id);
+};
+
 export const createPatient = (patient: PatientCreateInput): Patient => {
-  const newPatient = {
+  const newPatient: Patient = {
     ...patient,
     id: uuidv4(),
+    entries: [],
   };
   patients.push(newPatient);
   return newPatient;
