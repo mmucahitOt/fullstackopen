@@ -38,7 +38,7 @@ const DiaryCreate = ({ fetchDiaries, handleNotification }: DiaryCreateProps) => 
       <div>
         {Object.values(Weather).map((weather) => (
           <label key={weather}>
-            <input type="radio" name="weather" value={weather} onChange={(e) => setWeather(e.target.value)} />
+            <input type="radio" name="weather" value={weather} onChange={(e) => setWeather(e.target.value as Weather)} />
             {weather}
           </label>
         ))}
@@ -46,7 +46,7 @@ const DiaryCreate = ({ fetchDiaries, handleNotification }: DiaryCreateProps) => 
       <div>
         {Object.values(Visibility).map((visibility) => (
           <label key={visibility}>
-            <input type="radio" name="visibility" value={visibility} onChange={(e) => setVisibility(e.target.value)} />
+            <input type="radio" name="visibility" value={visibility} onChange={(e) => setVisibility(e.target.value as Visibility)} />
             {visibility}
           </label>
         ))}
