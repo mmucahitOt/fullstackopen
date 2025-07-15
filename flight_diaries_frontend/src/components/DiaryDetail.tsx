@@ -7,7 +7,7 @@ interface DiaryDetailProps {
 
 const DiaryListItem = ({ diary }: DiaryDetailProps) => {
   const [showDetails, setShowDetails] = useState(false);
-  return <div>
+  return <div key={diary.id}>
     <h3>{diary.date}</h3>
     <p>visibility: {diary.visibility}</p>
     <p>weather: {diary.weather}</p>

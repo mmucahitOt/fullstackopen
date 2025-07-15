@@ -1,12 +1,8 @@
 import { useEffect, useState } from 'react'
+import { NotificationType } from '../types'
 
-interface NotificationProps {
-  message: string;
-  type: 'error' | 'success';
-}
-
-const Notification = (props: NotificationProps) => {
-  const [visible, setVisible] = useState(true)
+const Notification = (props: NotificationType) => {
+  const [visible, setVisible] = useState(false)
 
   useEffect(() => {
     if (props) {

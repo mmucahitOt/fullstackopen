@@ -1,42 +1,44 @@
 import express, { Request, Response } from "express";
 import diaryService from "../services/diaryService";
-import { DiaryEntry, NewDiaryEntry } from "../types";
-import { newDiaryValidationMiddleware } from "../utils";
+import { DiaryEntry, NewDiaryEntry, ResponseBody } from "../types";
+import toNewDiaryEntry from "../utils";
 
 const router = express.Router();
 
-router.get("/", (_req: Request, res: Response<DiaryEntry[]>) => {
-  res.send(diaryService.getEntries());
+router.get("/", (_req: Request, res: Response<ResponseBody<DiaryEntry[]>>) => {
+  res.send({ data: diaryService.getEntries() });
 });
 
-router.get(
-  "/:id",
-  (req: Request, res: Response<DiaryEntry | { error: string }>) => {
-    const diary = diaryService.findById(Number(req.params.id));
-    if (!diary) {
-      return res.status(404).send({ error: "Diary not found" });
-    }
-    return res.send(diary);
+router.get("/:id", (req: Request, res: Response<ResponseBody<DiaryEntry>>) => {
+  const diary = diaryService.findById(Number(req.params.id));
+  if (!diary) {
+    return res.status(404).send({ error: { message: "Diary not found" } });
   }
-);
+  return res.send({ data: diary });
+});
 
 router.post(
   "/",
-  newDiaryValidationMiddleware,
   (
     req: Request<unknown, unknown, NewDiaryEntry>,
-    res: Response<DiaryEntry | { error: string }>
+    res: Response<ResponseBody<DiaryEntry>>
   ) => {
     try {
-      const newDiaryEntry = req.body;
-      const addedDiaryEntry = diaryService.createDiary(newDiaryEntry);
-      res.send(addedDiaryEntry);
-    } catch (error: unknown) {
-      let errorMessage: string = "Something went wrong.";
-      if (error instanceof Error) {
-        errorMessage += " Error: " + error.message;
+      const newDiaryEntry = toNewDiaryEntry(req.body);
+      const addedEntry = diaryService.createDiary(newDiaryEntry);
+      if (!addedEntry) {
+        return res
+          .status(400)
+          .send({ error: { message: "Diary not created" } });
       }
-      res.status(400).send({ error: errorMessage });
+      return res.send({ data: addedEntry });
+    } catch (error: unknown) {
+      console.log("error", error);
+      let errorMessage = "Something went wrong.";
+      if (error instanceof Error) {
+        errorMessage = " Error: " + error.message;
+      }
+      return res.status(400).send({ error: { message: errorMessage } });
     }
   }
 );

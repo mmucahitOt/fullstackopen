@@ -10,6 +10,7 @@ Content-Type: application/json
 
 {
   "date": "2025-01-01",
-  "weather": "sunny",
-  "visibility": "a"
+  "weather": "a",
+  "visibility": "poor",
+  "comment": "test"
 }
