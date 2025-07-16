@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Alert, Box, Card, CardContent, Typography } from '@mui/material';
 import { Gender, PatientDetails } from "../../types";
 import { useParams } from "react-router-dom";
-import patientService from "../../services/patients";
+import patientService from "../../services/patientService";
 import axios from "axios";
 import GenderIcon from "./components/GenderIcon";
 import { EntryList } from "./components";

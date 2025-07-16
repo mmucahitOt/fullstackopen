@@ -9,12 +9,13 @@ interface EntryListProps {
 }
 
 const EntryList = ({ entries }: EntryListProps) => {
+
   return (
     <Box sx={{ marginTop: 2 }}>
       <Typography sx={{ fontWeight: "bold" }} variant="h6">Entries</Typography>
       <List>
         {entries.map((entry) => (
-          <EntryListItem key={entry.id} entry={entry} />
+          <EntryListItem key={entry.id} entry={entry}/>
         ))}
       </List>
     </Box>);

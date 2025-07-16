@@ -6,7 +6,7 @@ import { Button, Divider, Container, Typography } from '@mui/material';
 import { apiBaseUrl } from "./constants";
 import { Patient } from "./types";
 
-import patientService from "./services/patients";
+import patientService from "./services/patientService";
 import PatientListPage from "./components/PatientListPage";
 import PatientDetailsPage from "./components/PatientDetailsPage";
 
@@ -22,7 +22,7 @@ const App = () => {
     };
     void fetchPatientList();
   }, []);
-  
+
   return (
     <div className="App">
       <Router>
