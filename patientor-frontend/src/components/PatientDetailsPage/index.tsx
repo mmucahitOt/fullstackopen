@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
 import { Alert, Box, Card, CardContent, Typography } from '@mui/material';
-import { Gender, Patient } from "../../types";
+import { Gender, PatientDetails } from "../../types";
 import { useParams } from "react-router-dom";
 import patientService from "../../services/patients";
 import axios from "axios";
 import GenderIcon from "./components/GenderIcon";
+import { EntryList } from "./components";
 
 
 const PatientDetailsPage = () => {
   const { id } = useParams();
-  const [patient, setPatient] = useState<Patient | null>(null);
+  const [patient, setPatient] = useState<PatientDetails | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -36,6 +37,7 @@ const PatientDetailsPage = () => {
                 <Typography variant="h6">Date of Birth: {patient?.dateOfBirth}</Typography>
                 <Typography variant="h6">SSN: {patient?.ssn}</Typography>
                 <Typography variant="h6">Occupation: {patient?.occupation}</Typography>
+                {patient.entries.length > 0 && <EntryList entries={patient.entries} />}
               </CardContent>
             </Card>
           </Box>
