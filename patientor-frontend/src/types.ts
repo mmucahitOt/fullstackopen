@@ -73,3 +73,26 @@ export type Entry =
   | HealthCheckEntry;
 
 export type PatientFormValues = Omit<Patient, "id" | "entries">;
+
+export type HealthCheckEntryFormValues = Omit<HealthCheckEntry, "id">;
+
+export type OccupationalHealthcareEntryFormValues = Omit<
+  OccupationalHealthcareEntry,
+  "id"
+>;
+
+export type HospitalEntryFormValues = Omit<HospitalEntry, "id">;
+
+export type EntryFormValues =
+  | HealthCheckEntryFormValues
+  | OccupationalHealthcareEntryFormValues
+  | HospitalEntryFormValues;
+
+export type ValidationError = {
+  origin: string;
+  code: string;
+  minimum: number;
+  inclusive: boolean;
+  path: string[];
+  message: string;
+};

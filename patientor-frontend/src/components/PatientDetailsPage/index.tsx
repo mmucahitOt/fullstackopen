@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { Alert, Box, Card, CardContent, Typography } from '@mui/material';
 import { Gender, PatientDetails } from "../../types";
 import { useParams } from "react-router-dom";
-import patientService from "../../services/patientService";
+import { getById as getPatientById } from "../../services/patientService";
 import axios from "axios";
 import GenderIcon from "./components/GenderIcon";
-import { EntryList } from "./components";
+import { EntryList, EntityCreate } from "./components";
 
 
 const PatientDetailsPage = () => {
@@ -15,7 +15,7 @@ const PatientDetailsPage = () => {
 
   useEffect(() => {
     if (id) {
-      patientService.getById(id).then(patient => setPatient(patient)).catch(error => {
+      getPatientById(id).then(patient => setPatient(patient)).catch(error => {
         if (axios.isAxiosError(error)) {
           setError(error.response?.data.error || "Unrecognized axios error");
         } else {
@@ -38,6 +38,7 @@ const PatientDetailsPage = () => {
                 <Typography variant="h6">SSN: {patient?.ssn}</Typography>
                 <Typography variant="h6">Occupation: {patient?.occupation}</Typography>
                 {patient.entries.length > 0 && <EntryList entries={patient.entries} />}
+                {id && <EntityCreate patientId={id} />}
               </CardContent>
             </Card>
           </Box>

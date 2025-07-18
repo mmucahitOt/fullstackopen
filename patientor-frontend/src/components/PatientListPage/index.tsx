@@ -8,7 +8,7 @@ import AddPatientModal from "../AddPatientModal";
 
 import HealthRatingBar from "../HealthRatingBar";
 
-import patientService from "../../services/patientService";
+import { create as createPatient } from "../../services/patientService";
 interface Props {
   patients: Patient[]
   setPatients: React.Dispatch<React.SetStateAction<Patient[]>>
@@ -28,7 +28,7 @@ const PatientListPage = ({ patients, setPatients }: Props) => {
 
   const submitNewPatient = async (values: PatientFormValues) => {
     try {
-      const patient = await patientService.create(values);
+      const patient = await createPatient(values);
       setPatients(patients.concat(patient));
       setModalOpen(false);
     } catch (e: unknown) {
